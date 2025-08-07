@@ -124,31 +124,31 @@ export function QRCodeDialog({
     switch (status) {
       case 'CONNECTED':
         return {
-          color: 'bg-green-500',
+          color: 'bg-[#4a9eff]',
           icon: CheckCircle,
-          text: 'Conectado',
-          description: 'WhatsApp conectado e pronto para uso'
+          text: 'Connected',
+          description: 'WhatsApp connected and ready to use'
         };
       case 'CONNECTING':
         return {
-          color: 'bg-yellow-500',
+          color: 'bg-[#f5ca4a]',
           icon: RefreshCw,
-          text: 'Conectando',
-          description: 'Aguardando leitura do QR Code'
+          text: 'Connecting',
+          description: 'Waiting for QR Code scan'
         };
       case 'DISCONNECTED':
         return {
-          color: 'bg-red-500',
+          color: 'bg-[#ff4a4a]',
           icon: XCircle,
-          text: 'Desconectado',
-          description: 'WhatsApp desconectado'
+          text: 'Disconnected',
+          description: 'WhatsApp disconnected'
         };
       default:
         return {
-          color: 'bg-gray-500',
+          color: 'bg-[#3a3b3d]',
           icon: Smartphone,
-          text: status || 'Criado',
-          description: 'Instância criada'
+          text: status || 'Created',
+          description: 'Instance created'
         };
     }
   };
@@ -160,28 +160,28 @@ export function QRCodeDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto bg-gray-100 border-0 shadow-[0_8px_30px_rgba(0,0,0,0.12)] rounded-2xl">
-        <DialogHeader className="bg-gradient-to-r from-gray-900 to-gray-800 text-white p-4 -m-6 mb-4 rounded-t-2xl">
-          <DialogTitle className="text-white text-sm font-semibold tracking-[-0.03em] font-inter">Conectar WhatsApp</DialogTitle>
-          <DialogDescription className="text-gray-200 text-xs tracking-[-0.03em] font-inter">
-            Escaneie o QR Code com seu WhatsApp para conectar a instância "{instance.instanceName}"
+      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto bg-[#1a1b1d] border-[#3a3b3d] text-[#f5f5f7] rounded-md">
+        <DialogHeader>
+          <DialogTitle className="text-[#f5f5f7] text-lg font-medium">Connect WhatsApp</DialogTitle>
+          <DialogDescription className="text-[#f5f5f7]/60 text-sm">
+            Scan the QR Code with your WhatsApp to connect instance "{instance.instanceName}"
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 px-1">
           {/* Status Card */}
-          <Card className="bg-white border-gray-300 shadow-[0_4px_12px_rgba(0,0,0,0.05)] rounded-xl">
+          <Card className="bg-[#2a2b2d] border-[#3a3b3d] rounded-md">
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-sm flex items-center gap-2 text-gray-900 font-semibold tracking-[-0.03em] font-inter">
+                <CardTitle className="text-sm flex items-center gap-2 text-[#f5f5f7] font-medium">
                   <StatusIcon className={`h-4 w-4 ${polling && statusInfo.icon === RefreshCw ? 'animate-spin' : ''}`} />
-                  Status da Conexão
+                  Connection Status
                 </CardTitle>
-                <Badge className={`${statusInfo.color} text-white text-xs px-2 py-1 rounded-full border-0`}>
+                <Badge className={`${statusInfo.color} text-white text-xs px-2 py-1 rounded-md border-0`}>
                   {statusInfo.text}
                 </Badge>
               </div>
-              <CardDescription className="text-gray-600 text-xs tracking-[-0.03em] font-inter">
+              <CardDescription className="text-[#f5f5f7]/60 text-xs">
                 {statusInfo.description}
               </CardDescription>
             </CardHeader>
@@ -189,43 +189,43 @@ export function QRCodeDialog({
 
           {/* QR Code Display */}
           {currentStatus !== 'CONNECTED' && (
-            <Card className="bg-white border-gray-300 shadow-[0_4px_12px_rgba(0,0,0,0.05)] rounded-xl">
+            <Card className="bg-[#2a2b2d] border-[#3a3b3d] rounded-md">
               <CardContent className="p-4">
                 {instance.qrCode ? (
                   <div className="flex flex-col items-center space-y-3">
-                    <div className="bg-white p-3 rounded-xl border border-gray-200 shadow-sm">
+                    <div className="bg-white p-3 rounded-md border border-[#3a3b3d]">
                       <img 
                         src={instance.qrCode} 
-                        alt="QR Code WhatsApp" 
+                        alt="WhatsApp QR Code" 
                         className="w-48 h-48 object-contain"
                       />
                     </div>
                     
                     <div className="text-center space-y-2">
-                      <p className="text-xs text-gray-600 tracking-[-0.03em] font-inter">
-                        1. Abra o WhatsApp no seu celular
+                      <p className="text-xs text-[#f5f5f7]/80">
+                        1. Open WhatsApp on your phone
                       </p>
-                      <p className="text-xs text-gray-600 tracking-[-0.03em] font-inter">
-                        2. Toque em Menu ou Configurações e selecione Dispositivos conectados
+                      <p className="text-xs text-[#f5f5f7]/80">
+                        2. Tap Menu or Settings and select Linked Devices
                       </p>
-                      <p className="text-xs text-gray-600 tracking-[-0.03em] font-inter">
-                        3. Toque em Conectar um dispositivo
+                      <p className="text-xs text-[#f5f5f7]/80">
+                        3. Tap on Link a Device
                       </p>
-                      <p className="text-xs text-gray-600 tracking-[-0.03em] font-inter">
-                        4. Aponte seu telefone para esta tela para capturar o código
+                      <p className="text-xs text-[#f5f5f7]/80">
+                        4. Point your phone to this screen to capture the code
                       </p>
                     </div>
 
                     {(instance as any)?.pairingCode && (
-                      <div className="text-center p-3 bg-blue-50 rounded-xl border border-blue-200">
-                        <p className="text-xs text-blue-800 font-medium">
-                          Código de Pareamento (alternativo):
+                      <div className="text-center p-3 bg-[#2a2b2d] rounded-md border border-[#3a3b3d]">
+                        <p className="text-xs text-[#4a9eff] font-medium">
+                          Pairing Code (alternative):
                         </p>
-                        <p className="text-sm font-mono font-bold text-blue-900">
+                        <p className="text-sm font-mono font-bold text-[#f5f5f7]">
                           {(instance as any).pairingCode}
                         </p>
-                        <p className="text-xs text-blue-600 mt-1">
-                          Digite este código no WhatsApp se não conseguir escanear o QR
+                        <p className="text-xs text-[#f5f5f7]/60 mt-1">
+                          Enter this code in WhatsApp if you can't scan the QR
                         </p>
                       </div>
                     )}
@@ -234,33 +234,33 @@ export function QRCodeDialog({
                       variant="outline" 
                       onClick={refreshQRCode}
                       disabled={loading}
-                      className="border-gray-300 text-gray-700 hover:bg-gray-100 h-7 text-xs"
+                      className="h-7 text-xs bg-transparent border-[#3a3b3d] text-[#f5f5f7]/80 hover:bg-[#3a3b3d] hover:text-[#f5f5f7] rounded-sm"
                     >
                       {loading ? (
                         <RefreshCw className="h-3 w-3 mr-1.5 animate-spin" />
                       ) : (
                         <RefreshCw className="h-3 w-3 mr-1.5" />
                       )}
-                      Atualizar QR Code
+                      Refresh QR Code
                     </Button>
                   </div>
                 ) : (
                   <div className="flex flex-col items-center space-y-3 py-6">
-                    <Smartphone className="h-12 w-12 text-gray-400" />
-                    <p className="text-gray-600 text-center text-xs tracking-[-0.03em] font-inter">
-                      QR Code não disponível. Clique em "Gerar QR Code" para criar um novo.
+                    <Smartphone className="h-12 w-12 text-[#f5f5f7]/40" />
+                    <p className="text-[#f5f5f7]/60 text-center text-xs">
+                      QR Code not available. Click "Generate QR Code" to create a new one.
                     </p>
                     <Button 
                       onClick={refreshQRCode} 
                       disabled={loading}
-                      className="bg-gray-900 hover:bg-gray-800 text-white h-7 text-xs"
+                      className="h-7 bg-[#2a2b2d] border-0 hover:bg-[#3a3b3d] text-[#f5f5f7]/80 hover:text-[#f5f5f7] text-xs rounded-sm"
                     >
                       {loading ? (
                         <RefreshCw className="h-3 w-3 mr-1.5 animate-spin" />
                       ) : (
                         <RefreshCw className="h-3 w-3 mr-1.5" />
                       )}
-                      Gerar QR Code
+                      Generate QR Code
                     </Button>
                   </div>
                 )}
@@ -270,17 +270,17 @@ export function QRCodeDialog({
 
           {/* Success Message */}
           {currentStatus === 'CONNECTED' && (
-            <Card className="border-green-300 bg-green-50 shadow-[0_4px_12px_rgba(0,0,0,0.05)] rounded-xl">
+            <Card className="border-[#3a3b3d] bg-[#2a2b2d] rounded-md">
               <CardContent className="pt-4">
-                <div className="flex items-center space-x-2 text-green-800">
+                <div className="flex items-center space-x-2 text-[#4a9eff]">
                   <CheckCircle className="h-4 w-4" />
                   <span className="font-medium text-xs">
-                    WhatsApp conectado com sucesso!
+                    WhatsApp connected successfully!
                   </span>
                 </div>
                 {instance.connectedNumber && (
-                  <p className="text-xs text-green-700 mt-1">
-                    Número conectado: {instance.connectedNumber}
+                  <p className="text-xs text-[#f5f5f7]/80 mt-1">
+                    Connected number: {instance.connectedNumber}
                   </p>
                 )}
               </CardContent>
@@ -289,26 +289,26 @@ export function QRCodeDialog({
         </div>
 
         {/* Action Buttons */}
-        <div className="bg-gray-200/50 p-4 -m-6 mt-4 rounded-b-2xl border-t flex justify-end space-x-2">
+        <div className="bg-[#1a1b1d] p-4 -m-6 mt-4 border-t border-[#3a3b3d] flex justify-end space-x-2">
           <Button 
             variant="outline" 
             onClick={() => onOpenChange(false)}
-            className="border-gray-300 text-gray-700 hover:bg-gray-100 h-7 text-xs"
+            className="h-7 bg-transparent border-[#2a2b2d] hover:bg-[#2a2b2d] text-[#f5f5f7]/60 hover:text-[#f5f5f7] text-xs rounded-sm"
           >
-            {currentStatus === 'CONNECTED' ? 'Concluir' : 'Fechar'}
+            {currentStatus === 'CONNECTED' ? 'Done' : 'Close'}
           </Button>
           {(currentStatus === 'CONNECTING' || currentStatus === 'CREATED') && (
             <Button 
               onClick={checkStatus} 
               disabled={loading || polling}
-              className="bg-gray-900 hover:bg-gray-800 text-white shadow-lg h-7 text-xs"
+              className="h-7 bg-[#2a2b2d] border-0 hover:bg-[#3a3b3d] text-[#f5f5f7]/80 hover:text-[#f5f5f7] text-xs rounded-sm"
             >
-              {loading ? (
+              {polling ? (
                 <RefreshCw className="h-3 w-3 mr-1.5 animate-spin" />
               ) : (
                 <RefreshCw className="h-3 w-3 mr-1.5" />
               )}
-              Verificar Status
+              Check Status
             </Button>
           )}
         </div>

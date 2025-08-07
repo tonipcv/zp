@@ -156,27 +156,27 @@ export function CreateInstanceDialog({
 
     if (checkingName) {
       return (
-        <div className="flex items-center space-x-2 text-sm text-gray-600">
+        <div className="flex items-center space-x-2 text-xs text-[#f5f5f7]/70">
           <Loader2 className="h-3 w-3 animate-spin" />
-          <span>Verificando disponibilidade...</span>
+          <span>Checking availability...</span>
         </div>
       );
     }
 
     if (nameAvailable === true) {
       return (
-        <div className="flex items-center space-x-2 text-sm text-green-700">
+        <div className="flex items-center space-x-2 text-xs text-[#4a9eff]">
           <CheckCircle className="h-3 w-3" />
-          <span>Nome disponível</span>
+          <span>Name available</span>
         </div>
       );
     }
 
     if (nameAvailable === false) {
       return (
-        <div className="flex items-center space-x-2 text-sm text-red-700">
+        <div className="flex items-center space-x-2 text-xs text-[#ff4a4a]">
           <XCircle className="h-3 w-3" />
-          <span>Nome já está em uso</span>
+          <span>Name already in use</span>
         </div>
       );
     }
@@ -186,12 +186,12 @@ export function CreateInstanceDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto bg-gray-100 border-0 shadow-[0_8px_30px_rgba(0,0,0,0.12)] rounded-2xl">
-        <DialogHeader className="bg-gradient-to-r from-gray-900 to-gray-800 text-white p-4 -m-6 mb-4 rounded-t-2xl">
-          <DialogTitle className="text-white text-sm font-semibold tracking-[-0.03em] font-inter">Nova Instância WhatsApp</DialogTitle>
-          <DialogDescription className="text-gray-200 text-xs tracking-[-0.03em] font-inter">
-            Crie uma nova instância do WhatsApp Business. Deixe o nome em branco
-            para gerar automaticamente.
+      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto bg-[#1a1b1d] border-[#3a3b3d] text-[#f5f5f7] rounded-md">
+        <DialogHeader>
+          <DialogTitle className="text-[#f5f5f7] text-lg font-medium">New WhatsApp Instance</DialogTitle>
+          <DialogDescription className="text-[#f5f5f7]/60 text-sm">
+            Create a new WhatsApp Business instance. Leave the name blank
+            for automatic generation.
           </DialogDescription>
         </DialogHeader>
 
@@ -202,34 +202,34 @@ export function CreateInstanceDialog({
               name="instanceName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-900 font-medium text-xs">Nome da Instância (Opcional)</FormLabel>
+                  <FormLabel className="text-[#f5f5f7]/80 font-normal text-xs">Instance Name (Optional)</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="Ex: minha-empresa-wa"
+                      placeholder="Ex: my-company-wa"
                       {...field}
                       disabled={loading}
-                      className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500 focus:border-gray-900 focus:ring-gray-900 h-8 text-xs"
+                      className="h-8 bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-md focus:ring-1 focus:ring-[#3a3b3d] placeholder:text-[#f5f5f7]/40"
                     />
                   </FormControl>
                   {renderNameStatus()}
-                  <FormDescription className="text-gray-600 text-xs">
-                    Se não informado, será gerado automaticamente
+                  <FormDescription className="text-[#f5f5f7]/60 text-xs">
+                    If not provided, it will be generated automatically
                   </FormDescription>
                   <FormMessage />
                   
                   {/* Sugestões de nomes */}
                   {suggestedNames.length > 0 && (
                     <div className="space-y-2">
-                      <div className="flex items-center space-x-2 text-xs text-gray-600">
+                      <div className="flex items-center space-x-2 text-xs text-[#f5f5f7]/70">
                         <Lightbulb className="h-3 w-3" />
-                        <span>Sugestões de nomes disponíveis:</span>
+                        <span>Available name suggestions:</span>
                       </div>
                       <div className="flex flex-wrap gap-1">
                         {suggestedNames.map((suggestion, index) => (
                           <Badge
                             key={index}
                             variant="outline"
-                            className="cursor-pointer hover:bg-gray-900 hover:text-white border-gray-900 text-gray-900 text-xs px-2 py-1"
+                            className="cursor-pointer hover:bg-[#3a3b3d] hover:text-[#f5f5f7] border-[#3a3b3d] text-[#f5f5f7]/80 text-xs px-2 py-1 rounded-md"
                             onClick={() => handleSuggestionClick(suggestion)}
                           >
                             {suggestion}
@@ -247,18 +247,18 @@ export function CreateInstanceDialog({
               name="sessionToken"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-900 font-medium text-xs">Token de Sessão (Opcional)</FormLabel>
+                  <FormLabel className="text-[#f5f5f7]/80 font-normal text-xs">Session Token (Optional)</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Cole aqui o token de uma sessão anterior para reconectar sem QR Code"
+                      placeholder="Paste a token from a previous session to reconnect without QR Code"
                       rows={3}
                       {...field}
                       disabled={loading}
-                      className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500 focus:border-gray-900 focus:ring-gray-900 text-xs"
+                      className="bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-md focus:ring-1 focus:ring-[#3a3b3d] placeholder:text-[#f5f5f7]/40"
                     />
                   </FormControl>
-                  <FormDescription className="text-gray-600 text-xs">
-                    Use para reconectar uma sessão existente sem escanear QR Code
+                  <FormDescription className="text-[#f5f5f7]/60 text-xs">
+                    Use to reconnect an existing session without scanning QR Code
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -270,18 +270,18 @@ export function CreateInstanceDialog({
               name="webhookUrl"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-gray-900 font-medium text-xs">URL do Webhook (Opcional)</FormLabel>
+                  <FormLabel className="text-[#f5f5f7]/80 font-normal text-xs">Webhook URL (Optional)</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="https://seu-site.com/webhook/whatsapp"
+                      placeholder="https://your-site.com/webhook/whatsapp"
                       type="url"
                       {...field}
                       disabled={loading}
-                      className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-500 focus:border-gray-900 focus:ring-gray-900 h-8 text-xs"
+                      className="h-8 bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-md focus:ring-1 focus:ring-[#3a3b3d] placeholder:text-[#f5f5f7]/40"
                     />
                   </FormControl>
-                  <FormDescription className="text-gray-600 text-xs">
-                    URL para receber eventos do WhatsApp em tempo real
+                  <FormDescription className="text-[#f5f5f7]/60 text-xs">
+                    URL to receive WhatsApp events in real-time
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -292,11 +292,11 @@ export function CreateInstanceDialog({
               control={form.control}
               name="autoReconnect"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-xl border border-gray-300 p-3 bg-white">
+                <FormItem className="flex flex-row items-center justify-between rounded-md border border-[#3a3b3d] p-3 bg-[#2a2b2d]">
                   <div className="space-y-0.5">
-                    <FormLabel className="text-sm text-gray-900 font-medium">Reconexão Automática</FormLabel>
-                    <FormDescription className="text-gray-600 text-xs">
-                      Tentar reconectar automaticamente em caso de desconexão
+                    <FormLabel className="text-xs text-[#f5f5f7] font-normal">Auto Reconnect</FormLabel>
+                    <FormDescription className="text-[#f5f5f7]/60 text-xs">
+                      Automatically try to reconnect when disconnected
                     </FormDescription>
                   </div>
                   <FormControl>
@@ -304,30 +304,30 @@ export function CreateInstanceDialog({
                       checked={field.value}
                       onCheckedChange={field.onChange}
                       disabled={loading}
-                      className="data-[state=checked]:bg-gray-900"
+                      className="data-[state=checked]:bg-[#4a9eff]"
                     />
                   </FormControl>
                 </FormItem>
               )}
             />
 
-            <div className="bg-gray-200/50 p-4 -m-6 mt-4 rounded-b-2xl border-t flex justify-end space-x-2">
+            <div className="bg-[#1a1b1d] p-4 -m-6 mt-4 border-t border-[#3a3b3d] flex justify-end space-x-2">
               <Button
                 type="button"
                 variant="outline"
                 onClick={handleClose}
                 disabled={loading}
-                className="border-gray-300 text-gray-700 hover:bg-gray-100 h-7 text-xs"
+                className="h-7 bg-transparent border-[#2a2b2d] hover:bg-[#2a2b2d] text-[#f5f5f7]/60 hover:text-[#f5f5f7] text-xs rounded-sm"
               >
-                Cancelar
+                Cancel
               </Button>
               <Button 
                 type="submit" 
                 disabled={loading || (!!instanceName && nameAvailable === false)}
-                className="bg-gray-900 hover:bg-gray-800 text-white shadow-lg h-7 text-xs"
+                className="h-7 bg-[#2a2b2d] border-0 hover:bg-[#3a3b3d] text-[#f5f5f7]/80 hover:text-[#f5f5f7] text-xs rounded-sm"
               >
                 {loading && <Loader2 className="mr-1.5 h-3 w-3 animate-spin" />}
-                Criar Instância
+                Create Instance
               </Button>
             </div>
           </form>
