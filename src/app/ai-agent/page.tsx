@@ -89,7 +89,7 @@ export default function AIAgentPage() {
   const [instances, setInstances] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [creating, setCreating] = useState(false);
-  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const [webhookUrl, setWebhookUrl] = useState('');
   const [usingNgrok, setUsingNgrok] = useState(false);
   const [ngrokConfigured, setNgrokConfigured] = useState(false);
@@ -310,7 +310,7 @@ export default function AIAgentPage() {
         }
         
         toast.success(message);
-        setShowCreateForm(false);
+        setShowCreateModal(false);
         loadData();
         // Reset form
         setFormData({
@@ -582,7 +582,7 @@ export default function AIAgentPage() {
             {/* Action Buttons */}
             <div className="flex flex-row gap-2 mt-2 md:mt-0">
               <Button 
-                onClick={() => setShowCreateForm(true)}
+                onClick={() => setShowCreateModal(true)}
                 disabled={availableInstances.length === 0}
                 className="h-7 bg-[#2a2b2d] border-0 hover:bg-[#3a3b3d] text-[#f5f5f7]/80 hover:text-[#f5f5f7] text-xs rounded-sm"
               >
@@ -770,8 +770,8 @@ export default function AIAgentPage() {
 
             {/* Agents Tab */}
             <TabsContent value="agents" className="space-y-4">
-              {/* Create Form */}
-              {showCreateForm && (
+              {/* Create Form - Old inline version */}
+              {false && (
                 <Card className="bg-[#2a2b2d]/50 border border-[#3a3b3d]/30 shadow-sm rounded-sm">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-[#f5f5f7] tracking-[-0.03em] text-sm">Create New Agent</CardTitle>
@@ -801,18 +801,18 @@ export default function AIAgentPage() {
                       </div>
 
                       <div className="space-y-1.5">
-                        <Label htmlFor="model" className="text-gray-900 text-xs">Modelo da OpenAI</Label>
+                        <Label htmlFor="model" className="text-[#f5f5f7] text-xs">OpenAI Model</Label>
                         <Select 
                           value={formData.model} 
                           onValueChange={(value) => setFormData({...formData, model: value})}
                         >
-                          <SelectTrigger className="h-8">
+                          <SelectTrigger className="h-8 bg-[#2a2b2d] border-[#3a3b3d] text-[#f5f5f7]/80 rounded-sm">
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="gpt-3.5-turbo">GPT-3.5 Turbo (Rápido)</SelectItem>
-                            <SelectItem value="gpt-4">GPT-4 (Mais inteligente)</SelectItem>
-                            <SelectItem value="gpt-4-turbo">GPT-4 Turbo (Balanceado)</SelectItem>
+                          <SelectContent className="bg-[#2a2b2d] border-[#3a3b3d] text-[#f5f5f7]/80 rounded-sm">
+                            <SelectItem value="gpt-3.5-turbo" className="text-[#f5f5f7]/80 hover:text-[#f5f5f7]">GPT-3.5 Turbo (Fast & Economical)</SelectItem>
+                            <SelectItem value="gpt-4" className="text-[#f5f5f7]/80 hover:text-[#f5f5f7]">GPT-4 (More Intelligent)</SelectItem>
+                            <SelectItem value="gpt-4-turbo" className="text-[#f5f5f7]/80 hover:text-[#f5f5f7]">GPT-4 Turbo (Balanced)</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -908,15 +908,15 @@ export default function AIAgentPage() {
                       </div>
                     </div>
 
-                    <div className="space-y-4">
+                    <div className="space-y-4 p-4 bg-[#2a2b2d]/70 rounded-md border-0">
                       <div className="flex items-center gap-2 mb-3">
-                        <div className="w-5 h-5 bg-gray-400 text-white rounded-full flex items-center justify-center text-xs font-bold">2</div>
-                        <Label className="text-gray-900 font-medium text-xs">Configuração do Prompt</Label>
+                        <div className="w-6 h-6 bg-[#3a3b3d] text-[#f5f5f7] rounded-full flex items-center justify-center text-sm font-normal">2</div>
+                        <Label className="text-[#f5f5f7] font-normal text-sm">Prompt Configuration</Label>
                       </div>
 
                       {/* Seletor de Modo */}
                       <div className="space-y-2">
-                        <Label className="text-gray-900 font-medium text-xs">Modo de Configuração</Label>
+                        <Label className="text-[#f5f5f7]/80 font-normal text-xs">Configuration Mode</Label>
                         <div className="grid grid-cols-3 gap-2">
                           <button
                             type="button"
@@ -960,48 +960,48 @@ export default function AIAgentPage() {
                       {/* Seleção de Template */}
                       {promptMode === 'template' && (
                         <div className="space-y-3">
-                          <Label className="text-gray-900 font-medium text-xs">Escolha um Template</Label>
+                          <Label className="text-[#f5f5f7]/80 font-normal text-xs">Choose a Template</Label>
                           {loadingTemplates ? (
-                            <div className="flex items-center gap-2 text-xs text-gray-500">
-                              <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-gray-400"></div>
-                              Carregando templates...
+                            <div className="flex items-center gap-2 text-xs text-[#f5f5f7]/60">
+                              <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-[#f5f5f7]/40"></div>
+                              Loading templates...
                             </div>
                           ) : (
                             <div className="space-y-2">
                               {templates.map((template) => (
                                 <div
                                   key={template.id}
-                                  className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                                  className={`p-3 rounded-md border-0 cursor-pointer transition-all ${
                                     selectedTemplate === template.id
-                                      ? 'bg-blue-50 border-blue-200'
-                                      : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
+                                      ? 'bg-[#4a9eff]/20 border-0'
+                                      : 'bg-[#2a2b2d] hover:bg-[#3a3b3d]'
                                   }`}
                                   onClick={() => {
                                     setSelectedTemplate(template.id);
-                                    applyTemplate(template.id);
+                                    setFormData(prev => ({ ...prev, systemPrompt: template.prompt }));
                                   }}
                                 >
                                   <div className="flex items-start justify-between">
                                     <div className="flex-1">
-                                      <h4 className="font-medium text-xs text-gray-900">{template.name}</h4>
-                                      <p className="text-xs text-gray-600 mt-1">{template.description}</p>
+                                      <h4 className="font-normal text-xs text-[#f5f5f7]">{template.name}</h4>
+                                      <p className="text-xs text-[#f5f5f7]/70 mt-1">{template.description}</p>
                                       <div className="flex flex-wrap gap-1 mt-2">
                                         {template.variables.map((variable: string) => (
-                                          <span key={variable} className="px-2 py-1 bg-gray-200 text-gray-700 rounded text-xs">
+                                          <span key={variable} className="px-2 py-1 bg-[#3a3b3d] text-[#f5f5f7]/80 rounded-sm text-xs">
                                             {variable}
                                           </span>
                                         ))}
                                       </div>
                                     </div>
                                     {selectedTemplate === template.id && (
-                                      <CheckCircle className="h-4 w-4 text-blue-600 flex-shrink-0 ml-2" />
+                                      <CheckCircle className="h-4 w-4 text-[#4a9eff] flex-shrink-0 ml-2" />
                                     )}
                                   </div>
                                 </div>
                               ))}
                               {templates.length === 0 && (
-                                <p className="text-xs text-gray-500 text-center py-4">
-                                  Nenhum template disponível para este objetivo
+                                <p className="text-xs text-[#f5f5f7]/60 text-center py-4">
+                                  No templates available for this goal
                                 </p>
                               )}
                             </div>
@@ -1012,32 +1012,32 @@ export default function AIAgentPage() {
                       {/* Campo de Prompt Customizado */}
                       {promptMode === 'custom' && (
                         <div className="space-y-2">
-                          <Label className="text-gray-900 font-medium text-xs">Prompt Customizado</Label>
+                          <Label className="text-[#f5f5f7]/80 font-normal text-xs">Custom Prompt</Label>
                           <Textarea
                             value={formData.systemPrompt}
                             onChange={(e) => setFormData({...formData, systemPrompt: e.target.value})}
-                            placeholder="Escreva seu prompt personalizado aqui..."
-                            className="min-h-[120px] text-xs"
+                            placeholder="Write your custom prompt here..."
+                            className="min-h-[120px] text-xs bg-[#2a2b2d] border-0 text-[#f5f5f7] rounded-sm focus:ring-1 focus:ring-[#3a3b3d] placeholder:text-[#f5f5f7]/40"
                           />
                         </div>
                       )}
 
                       {/* Modo Automático - Apenas informativo */}
                       {promptMode === 'auto' && (
-                        <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-                          <p className="text-xs text-green-700">
-                            ✅ O prompt será gerado automaticamente com base nas informações preenchidas acima. 
-                            Preencha os campos da empresa para obter o melhor resultado.
+                        <div className="p-3 bg-[#2a2b2d] border-0 rounded-md">
+                          <p className="text-xs text-[#4a9eff] flex items-start gap-2">
+                            <span className="text-[#4a9eff]">✅</span>
+                            <span>The prompt will be automatically generated based on the information filled above. Complete the company fields for best results.</span>
                           </p>
                         </div>
                       )}
 
                       {/* Preview do Prompt (quando template ou custom) */}
-                      {(promptMode === 'template' || promptMode === 'custom') && formData.systemPrompt && (
+                      {formData.systemPrompt && ['template', 'custom'].includes(promptMode) && (
                         <div className="space-y-2">
-                          <Label className="text-gray-900 font-medium text-xs">Preview do Prompt</Label>
-                          <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg max-h-32 overflow-y-auto">
-                            <pre className="text-xs text-gray-700 whitespace-pre-wrap font-mono">
+                          <Label className="text-[#f5f5f7]/80 font-normal text-xs">Prompt Preview</Label>
+                          <div className="p-3 bg-[#2a2b2d] border-0 rounded-md max-h-32 overflow-y-auto">
+                            <pre className="text-xs text-[#f5f5f7]/80 whitespace-pre-wrap font-mono">
                               {formData.systemPrompt.substring(0, 500)}
                               {formData.systemPrompt.length > 500 && '...'}
                             </pre>
@@ -1047,7 +1047,7 @@ export default function AIAgentPage() {
                     </div>
 
                     <div className="space-y-1.5">
-                      <Label className="text-gray-900 font-medium text-xs">Máximo de Tokens</Label>
+                      <Label className="text-[#f5f5f7]/80 font-normal text-xs">Max Tokens</Label>
                       <Input
                         id="maxTokens"
                         type="number"
@@ -1055,12 +1055,12 @@ export default function AIAgentPage() {
                         onChange={(e) => setFormData({...formData, maxTokens: parseInt(e.target.value)})}
                         min={50}
                         max={1000}
-                        className="h-8"
+                        className="h-8 bg-[#2a2b2d] border-0 text-[#f5f5f7] rounded-sm focus:ring-1 focus:ring-[#3a3b3d]"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <Label className="text-gray-900 font-medium text-xs">Temperatura (0-1)</Label>
+                      <Label className="text-[#f5f5f7]/80 font-normal text-xs">Temperature (0-1)</Label>
                       <Input
                         id="temperature"
                         type="number"
@@ -1069,12 +1069,12 @@ export default function AIAgentPage() {
                         onChange={(e) => setFormData({...formData, temperature: parseFloat(e.target.value)})}
                         min={0}
                         max={1}
-                        className="h-8"
+                        className="h-8 bg-[#2a2b2d] border-0 text-[#f5f5f7] rounded-sm focus:ring-1 focus:ring-[#3a3b3d]"
                       />
                     </div>
 
                     <div className="space-y-1.5">
-                      <Label className="text-gray-900 font-medium text-xs">Mensagens por Minuto</Label>
+                      <Label className="text-[#f5f5f7]/80 font-normal text-xs">Messages per Minute</Label>
                       <Input
                         id="maxMessagesPerMinute"
                         type="number"
@@ -1082,7 +1082,7 @@ export default function AIAgentPage() {
                         onChange={(e) => setFormData({...formData, maxMessagesPerMinute: parseInt(e.target.value)})}
                         min={1}
                         max={20}
-                        className="h-8"
+                        className="h-8 bg-[#2a2b2d] border-0 text-[#f5f5f7] rounded-sm focus:ring-1 focus:ring-[#3a3b3d]"
                       />
                     </div>
 
@@ -1091,11 +1091,12 @@ export default function AIAgentPage() {
                         id="autoConfigureWebhook"
                         checked={formData.autoConfigureWebhook}
                         onCheckedChange={(checked) => setFormData({...formData, autoConfigureWebhook: checked})}
+                        className="data-[state=checked]:bg-[#4a9eff] data-[state=unchecked]:bg-[#3a3b3d]"
                       />
-                      <Label className="text-gray-900 font-medium text-xs">
-                        Configurar webhook automaticamente
-                        <span className="text-xs text-gray-600 block">
-                          Tentará configurar automaticamente as settings e webhook na Evolution API
+                      <Label className="text-[#f5f5f7] font-normal text-xs">
+                        Configure webhook automatically
+                        <span className="text-xs text-[#f5f5f7]/60 block">
+                          Will attempt to automatically configure settings and webhook in Evolution API
                         </span>
                       </Label>
                     </div>
@@ -1104,21 +1105,21 @@ export default function AIAgentPage() {
                       <Button 
                         onClick={createAgent} 
                         disabled={creating || !formData.instanceId}
-                        className="bg-gray-800/5 border-0 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)] transition-all duration-300 rounded-2xl text-gray-700 hover:bg-gray-800/10 flex items-center gap-1.5 h-8 text-xs"
+                        className="bg-[#4a9eff]/20 border-0 hover:bg-[#4a9eff]/30 transition-all duration-300 rounded-md text-[#f5f5f7] flex items-center gap-1.5 h-8 text-xs"
                       >
                         {creating ? (
-                          <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-gray-700"></div>
+                          <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-[#f5f5f7]"></div>
                         ) : (
                           <Bot className="h-3 w-3" />
                         )}
-                        {creating ? 'Criando...' : 'Criar Agente'}
+                        {creating ? 'Creating...' : 'Create Agent'}
                       </Button>
                       <Button 
                         variant="outline" 
-                        onClick={() => setShowCreateForm(false)}
-                        className="bg-gray-800/5 border-0 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)] transition-all duration-300 rounded-2xl text-gray-700 hover:bg-gray-800/10 h-8 text-xs"
+                        onClick={() => setShowCreateModal(false)}
+                        className="bg-[#2a2b2d] border border-[#3a3b3d] hover:bg-[#3a3b3d] transition-all duration-300 rounded-md text-[#f5f5f7] h-8 text-xs"
                       >
-                        Cancelar
+                        Cancel
                       </Button>
                     </div>
                   </CardContent>
@@ -1423,9 +1424,9 @@ export default function AIAgentPage() {
 
       {/* Edit Modal */}
       <Dialog open={showEditForm} onOpenChange={setShowEditForm}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-[#1c1d20] border border-[#2a2b2d] shadow-md">
-          <DialogHeader className="bg-[#2a2b2d] text-[#f5f5f7] p-4 -m-6 mb-6 rounded-t-sm">
-            <DialogTitle className="flex items-center gap-2 text-[#f5f5f7] tracking-[-0.03em]">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-[#1c1d20] border-0 shadow-md rounded-md">
+          <DialogHeader className="bg-[#2a2b2d] text-[#f5f5f7] p-4 -m-6 mb-6 rounded-t-md">
+            <DialogTitle className="flex items-center gap-2 text-[#f5f5f7] tracking-[-0.03em] font-normal">
               <Edit className="h-4 w-4" />
               Edit Agent: {editingAgent?.instance.instanceName}
             </DialogTitle>
@@ -1449,46 +1450,49 @@ export default function AIAgentPage() {
             </div>
 
             {/* Formulário Guiado - Camada 1 */}
-            <div className="space-y-4 p-4 bg-blue-50/50 rounded-lg border border-blue-200">
+            <div className="space-y-4 p-4 bg-[#2a2b2d]/70 rounded-md border-0">
               <div className="flex items-center gap-2 mb-4">
-                <div className="w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-bold">1</div>
-                <h3 className="text-base font-semibold text-gray-900 tracking-[-0.03em] font-inter">Contexto Principal</h3>
+                <div className="w-6 h-6 bg-[#3a3b3d] text-[#f5f5f7] rounded-full flex items-center justify-center text-sm font-normal">1</div>
+                <h3 className="text-sm font-normal text-[#f5f5f7] tracking-[-0.03em]">Main Context</h3>
               </div>
-              <p className="text-sm text-gray-600 mb-4 tracking-[-0.03em] font-inter">
-                Preencha essas informações para que o agente tenha contexto inteligente sobre seu negócio. 
-                O prompt será gerado automaticamente com base nessas informações.
+              <p className="text-xs text-[#f5f5f7]/70 mb-4 tracking-[-0.03em]">
+                Fill in this information so the agent has intelligent context about your business.
+                The prompt will be automatically generated based on this information.
               </p>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-gray-900 font-medium">Nome da Empresa</Label>
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Company Name</Label>
                   <Input
                     value={editFormData.companyName}
                     onChange={(e) => setEditFormData(prev => ({ ...prev, companyName: e.target.value }))}
                     placeholder="Ex: TechSolutions"
+                    className="bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs h-8 rounded-sm focus:ring-1 focus:ring-[#3a3b3d] placeholder:text-[#f5f5f7]/40"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-gray-900 font-medium">Produto/Serviço</Label>
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Product/Service</Label>
                   <Input
                     value={editFormData.product}
                     onChange={(e) => setEditFormData(prev => ({ ...prev, product: e.target.value }))}
-                    placeholder="Ex: Sistema de gestão empresarial"
+                    placeholder="Ex: Business management system"
+                    className="bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs h-8 rounded-sm focus:ring-1 focus:ring-[#3a3b3d] placeholder:text-[#f5f5f7]/40"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-gray-900 font-medium">Principal Problema que Resolve</Label>
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Main Problem it Solves</Label>
                   <Input
                     value={editFormData.mainPain}
                     onChange={(e) => setEditFormData(prev => ({ ...prev, mainPain: e.target.value }))}
-                    placeholder="Ex: Desorganização de processos internos"
+                    placeholder="Ex: Disorganized internal processes"
+                    className="bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs h-8 rounded-sm focus:ring-1 focus:ring-[#3a3b3d] placeholder:text-[#f5f5f7]/40"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-gray-900 font-medium">Objetivo do Agente</Label>
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Agent Goal</Label>
                   <Select 
                     value={editFormData.goal} 
                     onValueChange={(value: 'SALES' | 'SUPPORT' | 'LEAD_GENERATION' | 'QUALIFICATION' | 'RETENTION' | 'EDUCATION') => {
@@ -1500,16 +1504,16 @@ export default function AIAgentPage() {
                       }
                     }}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger className="bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs h-8 rounded-sm focus:ring-1 focus:ring-[#3a3b3d]">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="SALES">Vendas</SelectItem>
-                      <SelectItem value="SUPPORT">Suporte</SelectItem>
-                      <SelectItem value="LEAD_GENERATION">Geração de Leads</SelectItem>
-                      <SelectItem value="QUALIFICATION">Qualificação</SelectItem>
-                      <SelectItem value="RETENTION">Retenção</SelectItem>
-                      <SelectItem value="EDUCATION">Educação</SelectItem>
+                    <SelectContent className="bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-sm">
+                      <SelectItem value="SALES" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">Sales</SelectItem>
+                      <SelectItem value="SUPPORT" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">Support</SelectItem>
+                      <SelectItem value="LEAD_GENERATION" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">Lead Generation</SelectItem>
+                      <SelectItem value="QUALIFICATION" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">Qualification</SelectItem>
+                      <SelectItem value="RETENTION" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">Retention</SelectItem>
+                      <SelectItem value="EDUCATION" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">Education</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -1517,49 +1521,51 @@ export default function AIAgentPage() {
 
               <div className="grid grid-cols-1 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-gray-900 font-medium">Case de Sucesso (Opcional)</Label>
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Success Case (Optional)</Label>
                   <Textarea
                     value={editFormData.successCase}
                     onChange={(e) => setEditFormData(prev => ({ ...prev, successCase: e.target.value }))}
-                    placeholder="Ex: Empresa X reduziu 50% do tempo em processos administrativos..."
+                    placeholder="Ex: Company X reduced administrative process time by 50%..."
                     rows={2}
+                    className="bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-sm focus:ring-1 focus:ring-[#3a3b3d] placeholder:text-[#f5f5f7]/40 min-h-[60px]"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-gray-900 font-medium">Resposta para Objeção de Preço (Opcional)</Label>
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Price Objection Response (Optional)</Label>
                   <Textarea
                     value={editFormData.priceObjection}
                     onChange={(e) => setEditFormData(prev => ({ ...prev, priceObjection: e.target.value }))}
-                    placeholder="Ex: Nosso investimento se paga em 3 meses com a economia gerada..."
+                    placeholder="Ex: Our investment pays for itself within 3 months through generated savings..."
                     rows={2}
+                    className="bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-sm focus:ring-1 focus:ring-[#3a3b3d] placeholder:text-[#f5f5f7]/40 min-h-[60px]"
                   />
                 </div>
               </div>
             </div>
 
             {/* Configuração do Prompt - Seção 2 */}
-            <div className="space-y-4">
+            <div className="space-y-4 p-4 bg-[#2a2b2d]/70 rounded-md border-0">
               <div className="flex items-center gap-2 mb-3">
-                <div className="w-6 h-6 bg-gray-400 text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
-                <Label className="text-gray-900 font-medium text-base">Configuração do Prompt</Label>
+                <div className="w-6 h-6 bg-[#3a3b3d] text-[#f5f5f7] rounded-full flex items-center justify-center text-sm font-normal">2</div>
+                <Label className="text-[#f5f5f7] font-normal text-sm">Prompt Configuration</Label>
               </div>
 
               {/* Seletor de Modo */}
               <div className="space-y-2">
-                <Label className="text-gray-900 font-medium text-sm">Modo de Configuração</Label>
+                <Label className="text-[#f5f5f7]/80 font-normal text-xs">Configuration Mode</Label>
                 <div className="grid grid-cols-3 gap-2">
                   <button
                     type="button"
                     onClick={() => setEditPromptMode('auto')}
-                    className={`p-2 text-xs rounded-lg border transition-all ${
+                    className={`p-2 text-xs rounded-md border-0 transition-all ${
                       editPromptMode === 'auto' 
-                        ? 'bg-blue-50 border-blue-200 text-blue-700' 
-                        : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100'
+                        ? 'bg-[#3a3b3d] text-[#f5f5f7]' 
+                        : 'bg-[#2a2b2d] text-[#f5f5f7]/70 hover:bg-[#3a3b3d]/50 hover:text-[#f5f5f7]'
                     }`}
                   >
-                    <div className="font-medium">Automático</div>
-                    <div className="text-xs opacity-75">Baseado nos campos</div>
+                    <div className="font-normal">Automatic</div>
+                    <div className="text-xs opacity-75">Based on fields</div>
                   </button>
                   <button
                     type="button"
@@ -1567,26 +1573,26 @@ export default function AIAgentPage() {
                       setEditPromptMode('template');
                       loadEditTemplates(editFormData.goal);
                     }}
-                    className={`p-2 text-xs rounded-lg border transition-all ${
+                    className={`p-2 text-xs rounded-md border-0 transition-all ${
                       editPromptMode === 'template' 
-                        ? 'bg-blue-50 border-blue-200 text-blue-700' 
-                        : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100'
+                        ? 'bg-[#3a3b3d] text-[#f5f5f7]' 
+                        : 'bg-[#2a2b2d] text-[#f5f5f7]/70 hover:bg-[#3a3b3d]/50 hover:text-[#f5f5f7]'
                     }`}
                   >
-                    <div className="font-medium">Template</div>
-                    <div className="text-xs opacity-75">Pré-configurado</div>
+                    <div className="font-normal">Template</div>
+                    <div className="text-xs opacity-75">Pre-configured</div>
                   </button>
                   <button
                     type="button"
                     onClick={() => setEditPromptMode('custom')}
-                    className={`p-2 text-xs rounded-lg border transition-all ${
+                    className={`p-2 text-xs rounded-md border-0 transition-all ${
                       editPromptMode === 'custom' 
-                        ? 'bg-blue-50 border-blue-200 text-blue-700' 
-                        : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100'
+                        ? 'bg-[#3a3b3d] text-[#f5f5f7]' 
+                        : 'bg-[#2a2b2d] text-[#f5f5f7]/70 hover:bg-[#3a3b3d]/50 hover:text-[#f5f5f7]'
                     }`}
                   >
-                    <div className="font-medium">Customizado</div>
-                    <div className="text-xs opacity-75">Escrever próprio</div>
+                    <div className="font-normal">Custom</div>
+                    <div className="text-xs opacity-75">Write your own</div>
                   </button>
                 </div>
               </div>
@@ -1594,48 +1600,48 @@ export default function AIAgentPage() {
               {/* Seleção de Template */}
               {editPromptMode === 'template' && (
                 <div className="space-y-3">
-                  <Label className="text-gray-900 font-medium text-sm">Escolha um Template</Label>
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Select a Template</Label>
                   {editLoadingTemplates ? (
-                    <div className="flex items-center gap-2 text-xs text-gray-500">
-                      <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-gray-400"></div>
-                      Carregando templates...
+                    <div className="flex items-center gap-2 text-xs text-[#f5f5f7]/70">
+                      <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-[#f5f5f7]/40"></div>
+                      Loading templates...
                     </div>
                   ) : (
                     <div className="space-y-2">
                       {editTemplates.map((template) => (
                         <div
                           key={template.id}
-                          className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                          className={`p-3 rounded-md border-0 cursor-pointer transition-all ${
                             editSelectedTemplate === template.id
-                              ? 'bg-blue-50 border-blue-200'
-                              : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
+                              ? 'bg-[#3a3b3d] text-[#f5f5f7]'
+                              : 'bg-[#2a2b2d] text-[#f5f5f7]/70 hover:bg-[#3a3b3d]/50'
                           }`}
                           onClick={() => {
                             setEditSelectedTemplate(template.id);
-                            applyEditTemplate(template.id);
+                            setEditFormData(prev => ({ ...prev, systemPrompt: template.prompt }));
                           }}
                         >
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
-                              <h4 className="font-medium text-xs text-gray-900">{template.name}</h4>
-                              <p className="text-xs text-gray-600 mt-1">{template.description}</p>
+                              <h4 className="font-normal text-xs text-[#f5f5f7]">{template.name}</h4>
+                              <p className="text-xs text-[#f5f5f7]/70 mt-1">{template.description}</p>
                               <div className="flex flex-wrap gap-1 mt-2">
                                 {template.variables.map((variable: string) => (
-                                  <span key={variable} className="px-2 py-1 bg-gray-200 text-gray-700 rounded text-xs">
+                                  <span key={variable} className="px-2 py-1 bg-[#3a3b3d] text-[#f5f5f7]/80 rounded text-xs">
                                     {variable}
                                   </span>
                                 ))}
                               </div>
                             </div>
                             {editSelectedTemplate === template.id && (
-                              <CheckCircle className="h-4 w-4 text-blue-600 flex-shrink-0 ml-2" />
+                              <CheckCircle className="h-4 w-4 text-[#4a9eff] flex-shrink-0 ml-2" />
                             )}
                           </div>
                         </div>
                       ))}
                       {editTemplates.length === 0 && (
-                        <p className="text-xs text-gray-500 text-center py-4">
-                          Nenhum template disponível para este objetivo
+                        <p className="text-xs text-[#f5f5f7]/60 text-center py-4">
+                          No templates available for this goal
                         </p>
                       )}
                     </div>
@@ -1645,33 +1651,34 @@ export default function AIAgentPage() {
 
               {/* Campo de Prompt Customizado */}
               {editPromptMode === 'custom' && (
-                <div className="space-y-2">
-                  <Label className="text-gray-900 font-medium text-sm">Prompt Customizado</Label>
+                <div className="space-y-3 mt-3">
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Custom Prompt</Label>
                   <Textarea
                     value={editFormData.systemPrompt}
                     onChange={(e) => setEditFormData(prev => ({ ...prev, systemPrompt: e.target.value }))}
-                    placeholder="Escreva seu prompt personalizado aqui..."
-                    className="min-h-[120px] text-xs"
+                    placeholder="Write your custom prompt here..."
+                    rows={8}
+                    className="bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-sm focus:ring-1 focus:ring-[#3a3b3d] placeholder:text-[#f5f5f7]/40"
                   />
                 </div>
               )}
 
               {/* Modo Automático - Apenas informativo */}
               {editPromptMode === 'auto' && (
-                <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-                  <p className="text-xs text-green-700">
-                    ✅ O prompt será gerado automaticamente com base nas informações preenchidas acima. 
-                    Preencha os campos da empresa para obter o melhor resultado.
+                <div className="p-3 bg-[#2a2b2d] border-0 rounded-md">
+                  <p className="text-xs text-[#4a9eff] flex items-start gap-2">
+                    <span className="text-[#4a9eff]">✅</span>
+                    <span>The prompt will be automatically generated based on the information filled above. Complete the company fields for best results.</span>
                   </p>
                 </div>
               )}
 
               {/* Preview do Prompt (quando template ou custom) */}
-              {(editPromptMode === 'template' || editPromptMode === 'custom') && editFormData.systemPrompt && (
+              {editFormData.systemPrompt && ['template', 'custom'].includes(editPromptMode) && (
                 <div className="space-y-2">
-                  <Label className="text-gray-900 font-medium text-sm">Preview do Prompt</Label>
-                  <div className="p-3 bg-gray-50 border border-gray-200 rounded-lg max-h-32 overflow-y-auto">
-                    <pre className="text-xs text-gray-700 whitespace-pre-wrap font-mono">
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Prompt Preview</Label>
+                  <div className="p-3 bg-[#2a2b2d] border-0 rounded-md max-h-32 overflow-y-auto">
+                    <pre className="text-xs text-[#f5f5f7]/80 whitespace-pre-wrap font-mono">
                       {editFormData.systemPrompt.substring(0, 500)}
                       {editFormData.systemPrompt.length > 500 && '...'}
                     </pre>
@@ -1681,37 +1688,41 @@ export default function AIAgentPage() {
             </div>
 
             {/* Modelo */}
-            <div className="space-y-2">
-              <Label className="text-gray-900 font-medium">Modelo de IA</Label>
+            <div className="space-y-2 p-4 bg-[#2a2b2d]/70 rounded-md border-0">
+              <Label className="text-[#f5f5f7]/80 font-normal text-xs">AI Model</Label>
               <Select value={editFormData.model} onValueChange={(value) => setEditFormData(prev => ({ ...prev, model: value }))}>
-                <SelectTrigger>
+                <SelectTrigger className="bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs h-8 rounded-sm focus:ring-1 focus:ring-[#3a3b3d]">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="gpt-3.5-turbo">GPT-3.5 Turbo (Rápido e Econômico)</SelectItem>
-                  <SelectItem value="gpt-4">GPT-4 (Mais Inteligente)</SelectItem>
-                  <SelectItem value="gpt-4-turbo">GPT-4 Turbo (Balanceado)</SelectItem>
+                <SelectContent className="bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-sm">
+                  <SelectItem value="gpt-3.5-turbo" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">GPT-3.5 Turbo (Fast & Economical)</SelectItem>
+                  <SelectItem value="gpt-4" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">GPT-4 (More Intelligent)</SelectItem>
+                  <SelectItem value="gpt-4-turbo" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">GPT-4 Turbo (Balanced)</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             {/* Configurações Avançadas */}
-            <div className="space-y-4">
-              <Label className="text-gray-900 font-medium text-lg">Configurações Avançadas</Label>
+            <div className="space-y-4 p-4 bg-[#2a2b2d]/70 rounded-md border-0">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-6 h-6 bg-[#3a3b3d] text-[#f5f5f7] rounded-full flex items-center justify-center text-sm font-normal">3</div>
+                <Label className="text-[#f5f5f7] font-normal text-sm">Advanced Settings</Label>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-gray-900 font-medium">Máximo de Tokens</Label>
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Max Tokens</Label>
                   <Input
                     type="number"
                     value={editFormData.maxTokens}
                     onChange={(e) => setEditFormData(prev => ({ ...prev, maxTokens: parseInt(e.target.value) || 150 }))}
                     min="50"
                     max="4000"
+                    className="bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs h-8 rounded-sm focus:ring-1 focus:ring-[#3a3b3d]"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-gray-900 font-medium">Temperatura (0-1)</Label>
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Temperature (0-1)</Label>
                   <Input
                     type="number"
                     step="0.1"
@@ -1719,40 +1730,44 @@ export default function AIAgentPage() {
                     onChange={(e) => setEditFormData(prev => ({ ...prev, temperature: parseFloat(e.target.value) || 0.7 }))}
                     min="0"
                     max="1"
+                    className="bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs h-8 rounded-sm focus:ring-1 focus:ring-[#3a3b3d]"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-gray-900 font-medium">Mensagens por Minuto</Label>
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Messages per Minute</Label>
                   <Input
                     type="number"
                     value={editFormData.maxMessagesPerMinute}
                     onChange={(e) => setEditFormData(prev => ({ ...prev, maxMessagesPerMinute: parseInt(e.target.value) || 5 }))}
                     min="1"
                     max="60"
+                    className="bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs h-8 rounded-sm focus:ring-1 focus:ring-[#3a3b3d]"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-gray-900 font-medium">Cooldown (minutos)</Label>
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Cooldown (minutes)</Label>
                   <Input
                     type="number"
                     value={editFormData.cooldownMinutes}
                     onChange={(e) => setEditFormData(prev => ({ ...prev, cooldownMinutes: parseInt(e.target.value) || 30 }))}
                     min="0"
                     max="1440"
+                    className="bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs h-8 rounded-sm focus:ring-1 focus:ring-[#3a3b3d]"
                   />
                 </div>
               </div>
             </div>
 
             {/* Mensagem de Fallback */}
-            <div className="space-y-2">
-              <Label className="text-gray-900 font-medium">Mensagem de Fallback</Label>
+            <div className="space-y-2 p-4 bg-[#2a2b2d]/70 rounded-md border-0">
+              <Label className="text-[#f5f5f7]/80 font-normal text-xs">Fallback Message</Label>
               <Textarea
                 value={editFormData.fallbackMessage}
                 onChange={(e) => setEditFormData(prev => ({ ...prev, fallbackMessage: e.target.value }))}
-                placeholder="Mensagem enviada quando há erro ou limite atingido..."
+                placeholder="Message sent when there is an error or limit reached..."
+                className="bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-sm focus:ring-1 focus:ring-[#3a3b3d] placeholder:text-[#f5f5f7]/40 min-h-[60px]"
               />
             </div>
           </div>
@@ -1771,6 +1786,399 @@ export default function AIAgentPage() {
               disabled={loading}
             >
               {loading ? 'Saving...' : 'Save Changes'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Create Agent Modal */}
+      <Dialog open={showCreateModal} onOpenChange={setShowCreateModal}>
+        <DialogContent className="bg-[#1a1b1d] border-[#3a3b3d] text-[#f5f5f7] max-w-3xl max-h-[90vh] overflow-y-auto rounded-md">
+          <DialogHeader>
+            <DialogTitle className="text-[#f5f5f7] text-lg font-medium">Create New Agent</DialogTitle>
+            <DialogDescription className="text-[#f5f5f7]/60 text-sm">
+              Configure a new virtual assistant for a WhatsApp instance
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4 mt-4">
+            {/* WhatsApp Instance Selection */}
+            <div className="space-y-2">
+              <Label htmlFor="instance" className="text-[#f5f5f7]/80 font-normal text-xs">WhatsApp Instance</Label>
+              <Select 
+                value={formData.instanceId} 
+                onValueChange={(value) => setFormData({...formData, instanceId: value})}
+              >
+                <SelectTrigger className="h-8 bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-sm focus:ring-1 focus:ring-[#3a3b3d]">
+                  <SelectValue placeholder="Select an instance" />
+                </SelectTrigger>
+                <SelectContent className="bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-sm">
+                  {availableInstances.map((instance) => (
+                    <SelectItem key={instance.id} value={instance.id} className="text-[#f5f5f7] hover:bg-[#3a3b3d]">
+                      {instance.instanceName} ({instance.connectedNumber || 'Not connected'})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Configuração Guiada - Seção 1 */}
+            <div className="space-y-4 p-4 bg-[#2a2b2d]/70 rounded-md border-0">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-6 h-6 bg-[#3a3b3d] text-[#f5f5f7] rounded-full flex items-center justify-center text-sm font-normal">1</div>
+                <h3 className="text-[#f5f5f7] text-sm font-medium">Agent Information</h3>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Company Name (Optional)</Label>
+                  <Input
+                    value={formData.companyName}
+                    onChange={(e) => setFormData({...formData, companyName: e.target.value})}
+                    placeholder="Ex: Acme Inc."
+                    className="h-8 bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-sm focus:ring-1 focus:ring-[#3a3b3d] placeholder:text-[#f5f5f7]/40"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Product/Service (Optional)</Label>
+                  <Input
+                    value={formData.product}
+                    onChange={(e) => setFormData({...formData, product: e.target.value})}
+                    placeholder="Ex: Project Management Software"
+                    className="h-8 bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-sm focus:ring-1 focus:ring-[#3a3b3d] placeholder:text-[#f5f5f7]/40"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Main Problem it Solves</Label>
+                  <Input
+                    value={formData.mainPain}
+                    onChange={(e) => setFormData({...formData, mainPain: e.target.value})}
+                    placeholder="Ex: Internal process disorganization"
+                    className="h-8 bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-sm focus:ring-1 focus:ring-[#3a3b3d] placeholder:text-[#f5f5f7]/40"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Agent Goal</Label>
+                  <Select 
+                    value={formData.goal} 
+                    onValueChange={(value: 'SALES' | 'SUPPORT' | 'LEAD_GENERATION' | 'QUALIFICATION' | 'RETENTION' | 'EDUCATION') => 
+                      setFormData({...formData, goal: value})
+                    }
+                  >
+                    <SelectTrigger className="h-8 bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-sm focus:ring-1 focus:ring-[#3a3b3d]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-sm">
+                      <SelectItem value="SALES" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">Sales</SelectItem>
+                      <SelectItem value="SUPPORT" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">Support</SelectItem>
+                      <SelectItem value="LEAD_GENERATION" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">Lead Generation</SelectItem>
+                      <SelectItem value="QUALIFICATION" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">Qualification</SelectItem>
+                      <SelectItem value="RETENTION" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">Retention</SelectItem>
+                      <SelectItem value="EDUCATION" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">Education</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-3">
+                <div className="space-y-1.5">
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Success Case (Optional)</Label>
+                  <Textarea
+                    value={formData.successCase}
+                    onChange={(e) => setFormData({...formData, successCase: e.target.value})}
+                    placeholder="Ex: Company X reduced administrative process time by 50%..."
+                    rows={2}
+                    className="bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-sm focus:ring-1 focus:ring-[#3a3b3d] placeholder:text-[#f5f5f7]/40 min-h-[60px]"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Price Objection Response (Optional)</Label>
+                  <Textarea
+                    value={formData.priceObjection}
+                    onChange={(e) => setFormData({...formData, priceObjection: e.target.value})}
+                    placeholder="Ex: Our investment pays for itself within 3 months through generated savings..."
+                    rows={2}
+                    className="bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-sm focus:ring-1 focus:ring-[#3a3b3d] placeholder:text-[#f5f5f7]/40 min-h-[60px]"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Configuração do Prompt - Seção 2 */}
+            <div className="space-y-4 p-4 bg-[#2a2b2d]/70 rounded-md border-0">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-6 h-6 bg-[#3a3b3d] text-[#f5f5f7] rounded-full flex items-center justify-center text-sm font-normal">2</div>
+                <h3 className="text-[#f5f5f7] text-sm font-medium">Prompt Configuration</h3>
+              </div>
+
+              <div className="space-y-3">
+                <div className="space-y-2">
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">OpenAI Model</Label>
+                  <Select 
+                    value={formData.model} 
+                    onValueChange={(value) => setFormData({...formData, model: value})}
+                  >
+                    <SelectTrigger className="h-8 bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-sm focus:ring-1 focus:ring-[#3a3b3d]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-sm">
+                      <SelectItem value="gpt-3.5-turbo" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">GPT-3.5 Turbo (Fast & Economical)</SelectItem>
+                      <SelectItem value="gpt-4" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">GPT-4 (More Intelligent)</SelectItem>
+                      <SelectItem value="gpt-4-turbo" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">GPT-4 Turbo (Balanced)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Configuration Mode</Label>
+                  <div className="flex flex-col space-y-2">
+                    <div className="flex items-center space-x-2">
+                      <div className="grid grid-cols-3 gap-1 bg-[#2a2b2d] p-0.5 rounded-sm">
+                        <Button 
+                          type="button" 
+                          onClick={() => setPromptMode('auto')} 
+                          className={`text-xs h-7 rounded-sm ${promptMode === 'auto' ? 'bg-[#3a3b3d] text-[#f5f5f7]' : 'bg-transparent text-[#f5f5f7]/60 hover:text-[#f5f5f7]/80'}`}
+                        >
+                          Automatic
+                        </Button>
+                        <Button 
+                          type="button" 
+                          onClick={() => {
+                            setPromptMode('template');
+                            loadTemplates(formData.goal);
+                          }} 
+                          className={`text-xs h-7 rounded-sm ${promptMode === 'template' ? 'bg-[#3a3b3d] text-[#f5f5f7]' : 'bg-transparent text-[#f5f5f7]/60 hover:text-[#f5f5f7]/80'}`}
+                        >
+                          Template
+                        </Button>
+                        <Button 
+                          type="button" 
+                          onClick={() => setPromptMode('custom')} 
+                          className={`text-xs h-7 rounded-sm ${promptMode === 'custom' ? 'bg-[#3a3b3d] text-[#f5f5f7]' : 'bg-transparent text-[#f5f5f7]/60 hover:text-[#f5f5f7]/80'}`}
+                        >
+                          Custom
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {promptMode === 'auto' && (
+                  <div className="p-3 bg-[#2a2b2d] rounded-sm border-0">
+                    <p className="text-xs text-[#4a9eff] mb-2">Automatic Mode</p>
+                    <p className="text-xs text-[#f5f5f7]/70">
+                      The system will automatically generate a prompt based on the agent information you provided.
+                      This is the simplest way to get started.
+                    </p>
+                  </div>
+                )}
+
+                {promptMode === 'template' && (
+                  <div className="space-y-3">
+                    <Label className="text-[#f5f5f7]/80 font-normal text-xs">Select a Template</Label>
+                    {loadingTemplates ? (
+                      <div className="flex items-center gap-2 text-xs text-[#f5f5f7]/70">
+                        <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-[#f5f5f7]/40"></div>
+                        Loading templates...
+                      </div>
+                    ) : (
+                      <div className="space-y-2">
+                        {templates.map((template) => (
+                          <div
+                            key={template.id}
+                            className={`p-3 rounded-md border-0 cursor-pointer transition-all ${
+                              selectedTemplate === template.id
+                                ? 'bg-[#3a3b3d] text-[#f5f5f7]'
+                                : 'bg-[#2a2b2d] text-[#f5f5f7]/70 hover:bg-[#3a3b3d]/50'
+                            }`}
+                            onClick={() => {
+                              setSelectedTemplate(template.id);
+                              applyTemplate(template.id);
+                            }}
+                          >
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <h4 className="font-normal text-xs text-[#f5f5f7]">{template.name}</h4>
+                                <p className="text-xs text-[#f5f5f7]/70 mt-1">{template.description}</p>
+                                <div className="flex flex-wrap gap-1 mt-2">
+                                  {template.variables && template.variables.map((variable: string) => (
+                                    <span key={variable} className="px-2 py-1 bg-[#3a3b3d] text-[#f5f5f7]/80 rounded text-xs">
+                                      {variable}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                              {selectedTemplate === template.id && (
+                                <CheckCircle className="h-4 w-4 text-[#4a9eff] flex-shrink-0 ml-2" />
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                        {templates.length === 0 && (
+                          <p className="text-xs text-[#f5f5f7]/60 text-center py-4">
+                            No templates available for this goal
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {(promptMode === 'custom' || promptMode === 'template') && (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <Label className="text-[#f5f5f7]/80 font-normal text-xs">System Prompt</Label>
+                      <span className="text-[#f5f5f7]/40 text-[10px]">Use variables: {'{companyName}'}, {'{product}'}, {'{mainPain}'}, {'{successCase}'}, {'{priceObjection}'}</span>
+                    </div>
+                    <Textarea
+                      value={formData.systemPrompt}
+                      onChange={(e) => setFormData({...formData, systemPrompt: e.target.value})}
+                      placeholder="You are an AI assistant for [Company Name]..."
+                      rows={6}
+                      className="bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-sm focus:ring-1 focus:ring-[#3a3b3d] placeholder:text-[#f5f5f7]/40 min-h-[120px] font-mono"
+                    />
+                  </div>
+                )}
+
+                {/* Prompt Preview */}
+                {formData.systemPrompt && (
+                  <div className="space-y-2">
+                    <Label className="text-[#f5f5f7]/80 font-normal text-xs">Prompt Preview</Label>
+                    <div className="p-3 bg-[#2a2b2d] rounded-sm border border-[#3a3b3d]/30 text-xs text-[#f5f5f7]/70 font-mono whitespace-pre-wrap">
+                      {formData.systemPrompt
+                        .replace(/{companyName}/g, formData.companyName || '[Company Name]')
+                        .replace(/{product}/g, formData.product || '[Product/Service]')
+                        .replace(/{mainPain}/g, formData.mainPain || '[Main Problem]')
+                        .replace(/{successCase}/g, formData.successCase || '[Success Case]')
+                        .replace(/{priceObjection}/g, formData.priceObjection || '[Price Objection Response]')}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Advanced Settings - Seção 3 */}
+            <div className="space-y-4 p-4 bg-[#2a2b2d]/70 rounded-md border-0">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-6 h-6 bg-[#3a3b3d] text-[#f5f5f7] rounded-full flex items-center justify-center text-sm font-normal">3</div>
+                <h3 className="text-[#f5f5f7] text-sm font-medium">Advanced Settings</h3>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div className="space-y-2">
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Max Tokens</Label>
+                  <Input
+                    type="number"
+                    value={formData.maxTokens}
+                    onChange={(e) => setFormData({...formData, maxTokens: parseInt(e.target.value) || 150})}
+                    min="10"
+                    max="4000"
+                    className="h-8 bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-sm focus:ring-1 focus:ring-[#3a3b3d]"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Temperature</Label>
+                  <Input
+                    type="number"
+                    value={formData.temperature}
+                    onChange={(e) => setFormData({...formData, temperature: parseFloat(e.target.value) || 0.7})}
+                    min="0"
+                    max="2"
+                    step="0.1"
+                    className="h-8 bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-sm focus:ring-1 focus:ring-[#3a3b3d]"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Max Messages/Minute</Label>
+                  <Input
+                    type="number"
+                    value={formData.maxMessagesPerMinute}
+                    onChange={(e) => setFormData({...formData, maxMessagesPerMinute: parseInt(e.target.value) || 5})}
+                    min="1"
+                    max="60"
+                    className="h-8 bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-sm focus:ring-1 focus:ring-[#3a3b3d]"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Max Consecutive Responses</Label>
+                  <Input
+                    type="number"
+                    value={formData.maxConsecutiveResponses}
+                    onChange={(e) => setFormData({...formData, maxConsecutiveResponses: parseInt(e.target.value) || 3})}
+                    min="1"
+                    max="10"
+                    className="h-8 bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-sm focus:ring-1 focus:ring-[#3a3b3d]"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Cooldown (minutes)</Label>
+                  <Input
+                    type="number"
+                    value={formData.cooldownMinutes}
+                    onChange={(e) => setFormData({...formData, cooldownMinutes: parseInt(e.target.value) || 30})}
+                    min="0"
+                    max="1440"
+                    className="h-8 bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-sm focus:ring-1 focus:ring-[#3a3b3d]"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-[#f5f5f7]/80 font-normal text-xs">Auto-configure Webhook</Label>
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      checked={formData.autoConfigureWebhook}
+                      onCheckedChange={(checked) => setFormData({...formData, autoConfigureWebhook: checked})}
+                      className="bg-[#3a3b3d] data-[state=checked]:bg-[#4a9eff]"
+                    />
+                    <span className="text-xs text-[#f5f5f7]/70">
+                      {formData.autoConfigureWebhook ? 'Enabled' : 'Disabled'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Mensagem de Fallback */}
+            <div className="space-y-2 p-4 bg-[#2a2b2d]/70 rounded-md border-0">
+              <Label className="text-[#f5f5f7]/80 font-normal text-xs">Fallback Message</Label>
+              <Textarea
+                value={formData.fallbackMessage}
+                onChange={(e) => setFormData({...formData, fallbackMessage: e.target.value})}
+                placeholder="Message sent when there is an error or limit reached..."
+                className="bg-[#2a2b2d] border-0 text-[#f5f5f7] text-xs rounded-sm focus:ring-1 focus:ring-[#3a3b3d] placeholder:text-[#f5f5f7]/40 min-h-[60px]"
+              />
+            </div>
+          </div>
+
+          <DialogFooter className="mt-4">
+            <Button 
+              variant="outline" 
+              onClick={() => setShowCreateModal(false)}
+              className="bg-transparent hover:bg-[#2a2b2d] text-[#f5f5f7]/70 border-[#3a3b3d] text-xs rounded-sm h-7"
+            >
+              Cancel
+            </Button>
+            <Button 
+              onClick={createAgent}
+              className="bg-[#4a9eff] hover:bg-[#3a8eff] text-white text-xs rounded-sm h-7"
+              disabled={creating || !formData.instanceId}
+            >
+              {creating ? (
+                <>
+                  <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-[#f5f5f7] mr-2"></div>
+                  Creating...
+                </>
+              ) : (
+                'Create Agent'
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>
