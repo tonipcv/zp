@@ -557,8 +557,8 @@ export default function AIAgentPage() {
   if (loading) {
     return (
       <AppLayout>
-        <div className="flex items-center justify-center min-h-[400px]">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#35426A]"></div>
+        <div className="flex items-center justify-center min-h-[100px]">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#f5f5f7]/60"></div>
         </div>
       </AppLayout>
     );
@@ -566,35 +566,35 @@ export default function AIAgentPage() {
 
   return (
     <AppLayout>
-      <div className="min-h-[100dvh] bg-gray-100 pt-4 pb-8 px-2">
-        <div className="container mx-auto pl-1 sm:pl-2 md:pl-4 lg:pl-8 max-w-[99%] sm:max-w-[97%] md:max-w-[95%] lg:max-w-[92%]">
-          {/* Título */}
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4">
+      <div className="bg-[#1c1d20]">
+        <div>
+          {/* Title */}
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-2">
             <div>
-              <h1 className="text-lg sm:text-base md:text-lg font-bold text-gray-900 tracking-[-0.03em] font-inter">
-                Assistentes Virtuais
+              <h1 className="text-sm font-medium text-[#f5f5f7] tracking-[-0.03em]">
+                AI Agents
               </h1>
-              <p className="text-xs sm:text-xs md:text-xs text-gray-600 tracking-[-0.03em] font-inter">
-                Configure e gerencie seus bots inteligentes para WhatsApp
+              <p className="text-xs text-[#f5f5f7]/60 tracking-[-0.03em]">
+                Configure and manage your intelligent WhatsApp bots
               </p>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-2 mt-3 md:mt-0">
+            <div className="flex flex-row gap-2 mt-2 md:mt-0">
               <Button 
                 onClick={() => setShowCreateForm(true)}
                 disabled={availableInstances.length === 0}
-                className="h-8 sm:h-7 bg-gray-800/5 border-0 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)] transition-all duration-300 rounded-2xl text-gray-700 hover:bg-gray-800/10 text-xs sm:text-xs"
+                className="h-7 bg-[#2a2b2d] border-0 hover:bg-[#3a3b3d] text-[#f5f5f7]/80 hover:text-[#f5f5f7] text-xs rounded-sm"
               >
-                Novo Agente
+                New Agent
               </Button>
               
               <Link href="/ai-agent/knowledge">
                 <Button 
                   variant="outline"
-                  className="h-8 sm:h-7 bg-gray-800/5 border-0 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)] transition-all duration-300 rounded-2xl text-gray-700 hover:bg-gray-800/10 text-xs sm:text-xs"
+                  className="h-7 bg-transparent border-[#2a2b2d] hover:bg-[#2a2b2d] text-[#f5f5f7]/60 hover:text-[#f5f5f7] text-xs rounded-sm"
                 >
-                  Base de Conhecimento
+                  Knowledge Base
                 </Button>
               </Link>
             </div>
@@ -602,30 +602,30 @@ export default function AIAgentPage() {
 
           {/* Tabs */}
           <Tabs defaultValue="agents" className="space-y-4">
-            <TabsList className="grid grid-cols-4 mb-4 bg-gray-800/5 border-0 shadow-[0_4px_12px_rgba(0,0,0,0.05)] p-1 rounded-2xl max-w-[400px]">
+            <TabsList className="grid grid-cols-4 mb-2 bg-[#2a2b2d]/50 border-0 p-1 rounded-sm max-w-[400px]">
               <TabsTrigger 
                 value="agents" 
-                className="data-[state=active]:bg-gray-800/10 data-[state=active]:text-gray-900 data-[state=active]:border-b-0 text-gray-600 hover:text-gray-900 transition-colors rounded-xl text-xs flex items-center gap-1.5"
+                className="data-[state=active]:bg-[#2a2b2d] data-[state=active]:text-[#f5f5f7] text-[#f5f5f7]/60 hover:text-[#f5f5f7] transition-colors rounded-sm text-xs"
               >
-                Agentes
+                Agents
               </TabsTrigger>
               <TabsTrigger 
                 value="dashboard" 
-                className="data-[state=active]:bg-gray-800/10 data-[state=active]:text-gray-900 data-[state=active]:border-b-0 text-gray-600 hover:text-gray-900 transition-colors rounded-xl text-xs flex items-center gap-1.5"
+                className="data-[state=active]:bg-[#2a2b2d] data-[state=active]:text-[#f5f5f7] text-[#f5f5f7]/60 hover:text-[#f5f5f7] transition-colors rounded-sm text-xs"
               >
                 Dashboard
               </TabsTrigger>
               <TabsTrigger 
                 value="knowledge" 
-                className="data-[state=active]:bg-gray-800/10 data-[state=active]:text-gray-900 data-[state=active]:border-b-0 text-gray-600 hover:text-gray-900 transition-colors rounded-xl text-xs flex items-center gap-1.5"
+                className="data-[state=active]:bg-[#2a2b2d] data-[state=active]:text-[#f5f5f7] text-[#f5f5f7]/60 hover:text-[#f5f5f7] transition-colors rounded-sm text-xs"
               >
-                Conhecimento
+                Knowledge
               </TabsTrigger>
               <TabsTrigger 
                 value="webhook" 
-                className="data-[state=active]:bg-gray-800/10 data-[state=active]:text-gray-900 data-[state=active]:border-b-0 text-gray-600 hover:text-gray-900 transition-colors rounded-xl text-xs flex items-center gap-1.5"
+                className="data-[state=active]:bg-[#2a2b2d] data-[state=active]:text-[#f5f5f7] text-[#f5f5f7]/60 hover:text-[#f5f5f7] transition-colors rounded-sm text-xs"
               >
-                Configuração
+                Settings
               </TabsTrigger>
             </TabsList>
 
@@ -644,45 +644,45 @@ export default function AIAgentPage() {
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="text-center p-3 bg-blue-50/50 rounded-lg">
-                          <div className="text-xl font-bold text-blue-600 mb-1">
+                      <div className="grid grid-cols-3 gap-3 mb-4">
+                        <div className="text-center p-3 bg-[#2a2b2d] rounded-md border border-[#3a3b3d]/30">
+                          <div className="text-lg font-bold text-[#4a9eff] mb-1">
                             {stats.tokensUsedToday.toLocaleString()}
                           </div>
-                          <div className="text-xs text-gray-600">Tokens hoje</div>
+                          <div className="text-xs text-[#f5f5f7]/70">Tokens today</div>
                         </div>
-                        <div className="text-center p-3 bg-orange-50/50 rounded-lg">
-                          <div className="text-xl font-bold text-orange-600 mb-1">
+                        <div className="text-center p-3 bg-[#2a2b2d] rounded-md border border-[#3a3b3d]/30">
+                          <div className="text-lg font-bold text-[#ff9f4a] mb-1">
                             {stats.tokensUsedThisMonth.toLocaleString()}
                           </div>
-                          <div className="text-xs text-gray-600">Tokens este mês</div>
+                          <div className="text-xs text-[#f5f5f7]/70">Tokens this month</div>
                         </div>
-                        <div className="text-center p-3 bg-green-50/50 rounded-lg">
-                          <div className="text-xl font-bold text-green-600 mb-1">
+                        <div className="text-center p-3 bg-[#2a2b2d] rounded-md border border-[#3a3b3d]/30">
+                          <div className="text-lg font-bold text-[#4aff9f] mb-1">
                             {stats.freeTokensRemaining.toLocaleString()}
                           </div>
-                          <div className="text-xs text-gray-600">Tokens restantes</div>
+                          <div className="text-xs text-[#f5f5f7]/70">Tokens remaining</div>
                         </div>
                       </div>
                       
                       <div className="space-y-2">
-                        <div className="flex justify-between text-xs text-gray-900">
-                          <span>Uso mensal</span>
+                        <div className="flex justify-between text-xs text-[#f5f5f7]">
+                          <span>Monthly usage</span>
                           <span>{Math.round((stats.tokensUsedThisMonth / 100000) * 100)}%</span>
                         </div>
                         <Progress 
                           value={(stats.tokensUsedThisMonth / 100000) * 100} 
-                          className="h-2"
+                          className="h-2 bg-[#3a3b3d]"
                         />
-                        <div className="text-xs text-gray-600">
-                          Limite: 100.000 tokens gratuitos por mês
+                        <div className="text-xs text-[#f5f5f7]/70">
+                          Limit: 100,000 free tokens per month
                         </div>
                       </div>
 
                       {stats.freeTokensRemaining < 10000 && (
-                        <Alert className="bg-yellow-50/50 border-yellow-200">
-                          <AlertDescription className="text-yellow-800 text-xs">
-                            Atenção: Você tem menos de 10.000 tokens restantes este mês.
+                        <Alert className="bg-[#3a3b3d]/50 border-[#ff9f4a]/30 rounded-md">
+                          <AlertDescription className="text-[#ff9f4a] text-xs">
+                            Warning: You have less than 10,000 tokens remaining this month.
                           </AlertDescription>
                         </Alert>
                       )}
@@ -691,45 +691,45 @@ export default function AIAgentPage() {
 
                   {/* Stats Grid */}
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-                    <Card className="bg-gray-800/5 border-0 shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.16)] transition-all duration-300 rounded-2xl">
-                      <CardContent className="p-4">
+                    <Card className="bg-[#2a2b2d]/50 border border-[#3a3b3d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md">
+                      <CardContent className="p-3">
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="text-xs font-medium text-gray-600">Mensagens Hoje</p>
-                            <p className="text-xl font-bold text-gray-900">{stats.totalMessages}</p>
+                            <p className="text-xs font-medium text-[#f5f5f7]/70">Messages Today</p>
+                            <p className="text-lg font-bold text-[#f5f5f7]">{stats.totalMessages}</p>
                           </div>
                         </div>
                       </CardContent>
                     </Card>
 
-                    <Card className="bg-gray-800/5 border-0 shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.16)] transition-all duration-300 rounded-2xl">
-                      <CardContent className="p-4">
+                    <Card className="bg-[#2a2b2d]/50 border border-[#3a3b3d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md">
+                      <CardContent className="p-3">
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="text-xs font-medium text-gray-600">Respostas IA</p>
-                            <p className="text-xl font-bold text-gray-900">{stats.aiResponses}</p>
+                            <p className="text-xs font-medium text-[#f5f5f7]/70">AI Responses</p>
+                            <p className="text-lg font-bold text-[#f5f5f7]">{stats.aiResponses}</p>
                           </div>
                         </div>
                       </CardContent>
                     </Card>
 
-                    <Card className="bg-gray-800/5 border-0 shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.16)] transition-all duration-300 rounded-2xl">
-                      <CardContent className="p-4">
+                    <Card className="bg-[#2a2b2d]/50 border border-[#3a3b3d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md">
+                      <CardContent className="p-3">
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="text-xs font-medium text-gray-600">Tempo Médio</p>
-                            <p className="text-xl font-bold text-gray-900">{stats.avgResponseTime}s</p>
+                            <p className="text-xs font-medium text-[#f5f5f7]/70">Average Time</p>
+                            <p className="text-lg font-bold text-[#f5f5f7]">{stats.avgResponseTime}s</p>
                           </div>
                         </div>
                       </CardContent>
                     </Card>
 
-                    <Card className="bg-gray-800/5 border-0 shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.16)] transition-all duration-300 rounded-2xl">
-                      <CardContent className="p-4">
+                    <Card className="bg-[#2a2b2d]/50 border border-[#3a3b3d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md">
+                      <CardContent className="p-3">
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="text-xs font-medium text-gray-600">Conversas Ativas</p>
-                            <p className="text-xl font-bold text-gray-900">{stats.activeConversations}</p>
+                            <p className="text-xs font-medium text-[#f5f5f7]/70">Active Conversations</p>
+                            <p className="text-lg font-bold text-[#f5f5f7]">{stats.activeConversations}</p>
                           </div>
                         </div>
                       </CardContent>
@@ -737,27 +737,27 @@ export default function AIAgentPage() {
                   </div>
 
                   {/* Knowledge Base Card */}
-                  <Card className="bg-gray-800/5 border-0 shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.16)] transition-all duration-300 rounded-2xl">
-                    <CardContent className="p-4">
+                  <Card className="bg-[#2a2b2d]/50 border border-[#3a3b3d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md">
+                    <CardContent className="p-3">
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
-                          <h3 className="text-base font-semibold text-gray-900 mb-2 flex items-center gap-2 tracking-[-0.03em] font-inter">
-                            Base de Conhecimento
+                          <h3 className="text-base font-semibold text-[#f5f5f7] mb-2 flex items-center gap-2 tracking-[-0.03em] font-inter">
+                            Knowledge Base
                           </h3>
-                          <p className="text-gray-600 mb-3 tracking-[-0.03em] font-inter text-xs">
-                            Torne seus agentes mais inteligentes com conhecimento específico sobre objeções, FAQs, cases e muito mais.
+                          <p className="text-[#f5f5f7]/70 mb-3 tracking-[-0.03em] font-inter text-xs">
+                            Make your agents smarter with specific knowledge about objections, FAQs, case studies and more.
                           </p>
                           <div className="flex flex-wrap gap-1.5 mb-3">
-                            <Badge variant="secondary" className="text-xs">Objeções</Badge>
-                            <Badge variant="secondary" className="text-xs">FAQs</Badge>
-                            <Badge variant="secondary" className="text-xs">Cases</Badge>
-                            <Badge variant="secondary" className="text-xs">Processos</Badge>
+                            <Badge variant="secondary" className="text-xs bg-[#3a3b3d] text-[#f5f5f7]/80 hover:bg-[#4a4b4d]">Objections</Badge>
+                            <Badge variant="secondary" className="text-xs bg-[#3a3b3d] text-[#f5f5f7]/80 hover:bg-[#4a4b4d]">FAQs</Badge>
+                            <Badge variant="secondary" className="text-xs bg-[#3a3b3d] text-[#f5f5f7]/80 hover:bg-[#4a4b4d]">Cases</Badge>
+                            <Badge variant="secondary" className="text-xs bg-[#3a3b3d] text-[#f5f5f7]/80 hover:bg-[#4a4b4d]">Processes</Badge>
                           </div>
                         </div>
                         <div className="ml-4">
                           <Link href="/ai-agent/knowledge">
-                            <Button className="bg-gray-800/5 border-0 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)] transition-all duration-300 rounded-2xl text-gray-700 hover:bg-gray-800/10 h-8 text-xs">
-                              Gerenciar Conhecimento
+                            <Button className="bg-[#3a3b3d] border border-[#4a4b4d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md text-[#f5f5f7] hover:bg-[#4a4b4d] h-8 text-xs">
+                              Manage Knowledge
                             </Button>
                           </Link>
                         </div>
@@ -772,28 +772,28 @@ export default function AIAgentPage() {
             <TabsContent value="agents" className="space-y-4">
               {/* Create Form */}
               {showCreateForm && (
-                <Card className="bg-gray-800/5 border-0 shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.16)] transition-all duration-300 rounded-2xl">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-gray-900 tracking-[-0.03em] font-inter text-base">Criar Novo Agente</CardTitle>
-                    <CardDescription className="text-gray-600 tracking-[-0.03em] font-inter text-xs">
-                      Configure um novo assistente virtual para uma instância do WhatsApp
+                <Card className="bg-[#2a2b2d]/50 border border-[#3a3b3d]/30 shadow-sm rounded-sm">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-[#f5f5f7] tracking-[-0.03em] text-sm">Create New Agent</CardTitle>
+                    <CardDescription className="text-[#f5f5f7]/60 tracking-[-0.03em] text-xs">
+                      Configure a new virtual assistant for a WhatsApp instance
                     </CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-4">
+                  <CardContent className="space-y-3">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       <div className="space-y-1.5">
-                        <Label htmlFor="instance" className="text-gray-900 text-xs">Instância do WhatsApp</Label>
+                        <Label htmlFor="instance" className="text-[#f5f5f7] text-xs">WhatsApp Instance</Label>
                         <Select 
                           value={formData.instanceId} 
                           onValueChange={(value) => setFormData({...formData, instanceId: value})}
                         >
-                          <SelectTrigger className="h-8">
-                            <SelectValue placeholder="Selecione uma instância" />
+                          <SelectTrigger className="h-8 bg-[#2a2b2d] border-[#3a3b3d] text-[#f5f5f7]/80 rounded-sm">
+                            <SelectValue placeholder="Select an instance" />
                           </SelectTrigger>
-                          <SelectContent>
+                          <SelectContent className="bg-[#2a2b2d] border-[#3a3b3d] text-[#f5f5f7]/80">
                             {availableInstances.map((instance) => (
-                              <SelectItem key={instance.id} value={instance.id}>
-                                {instance.instanceName} ({instance.connectedNumber || 'Não conectado'})
+                              <SelectItem key={instance.id} value={instance.id} className="text-[#f5f5f7]/80 hover:text-[#f5f5f7]">
+                                {instance.instanceName} ({instance.connectedNumber || 'Not connected'})
                               </SelectItem>
                             ))}
                           </SelectContent>
@@ -819,65 +819,65 @@ export default function AIAgentPage() {
                     </div>
 
                     {/* Formulário Guiado - Camada 1 */}
-                    <div className="space-y-3 p-3 bg-blue-50/50 rounded-lg border border-blue-200">
-                      <div className="flex items-center gap-2 mb-3">
-                        <div className="w-5 h-5 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-xs font-bold">1</div>
-                        <h3 className="text-base font-semibold text-gray-900 tracking-[-0.03em] font-inter">Contexto Principal</h3>
+                    <div className="space-y-3 p-3 bg-[#2a2b2d]/50 rounded-md border border-[#3a3b3d]/30">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="w-5 h-5 bg-[#4a9eff] text-white rounded-full flex items-center justify-center text-xs font-medium">1</div>
+                        <h3 className="text-sm font-medium text-[#f5f5f7] tracking-[-0.03em]">Main Context</h3>
                       </div>
-                      <p className="text-xs text-gray-600 mb-3 tracking-[-0.03em] font-inter">
-                        Preencha essas informações para que o agente tenha contexto inteligente sobre seu negócio. 
-                        O prompt será gerado automaticamente com base nessas informações.
+                      <p className="text-xs text-[#f5f5f7]/70 mb-2 tracking-[-0.03em]">
+                        Fill in this information so the agent has intelligent context about your business.
+                        The prompt will be automatically generated based on this information.
                       </p>
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         <div className="space-y-1.5">
-                          <Label className="text-gray-900 font-medium text-xs">Nome da Empresa</Label>
+                          <Label className="text-[#f5f5f7] text-xs">Company Name</Label>
                           <Input
                             value={formData.companyName}
                             onChange={(e) => setFormData({...formData, companyName: e.target.value})}
                             placeholder="Ex: TechSolutions"
-                            className="h-8"
+                            className="h-8 bg-[#2a2b2d] border-[#3a3b3d] text-[#f5f5f7]/80 rounded-sm placeholder:text-[#f5f5f7]/40"
                           />
                         </div>
 
                         <div className="space-y-1.5">
-                          <Label className="text-gray-900 font-medium text-xs">Produto/Serviço</Label>
+                          <Label className="text-[#f5f5f7] text-xs">Product/Service</Label>
                           <Input
                             value={formData.product}
                             onChange={(e) => setFormData({...formData, product: e.target.value})}
-                            placeholder="Ex: Sistema de gestão empresarial"
-                            className="h-8"
+                            placeholder="Ex: Business Management System"
+                            className="h-8 bg-[#2a2b2d] border-[#3a3b3d] text-[#f5f5f7]/80 rounded-sm placeholder:text-[#f5f5f7]/40"
                           />
                         </div>
 
                         <div className="space-y-1.5">
-                          <Label className="text-gray-900 font-medium text-xs">Principal Problema que Resolve</Label>
+                          <Label className="text-[#f5f5f7] text-xs">Main Problem it Solves</Label>
                           <Input
                             value={formData.mainPain}
                             onChange={(e) => setFormData({...formData, mainPain: e.target.value})}
-                            placeholder="Ex: Desorganização de processos internos"
-                            className="h-8"
+                            placeholder="Ex: Internal process disorganization"
+                            className="h-8 bg-[#2a2b2d] border-[#3a3b3d] text-[#f5f5f7]/80 rounded-md placeholder:text-[#f5f5f7]/40"
                           />
                         </div>
 
                         <div className="space-y-1.5">
-                          <Label className="text-gray-900 font-medium text-xs">Objetivo do Agente</Label>
+                          <Label className="text-[#f5f5f7] text-xs">Agent Goal</Label>
                           <Select 
                             value={formData.goal} 
                             onValueChange={(value: 'SALES' | 'SUPPORT' | 'LEAD_GENERATION' | 'QUALIFICATION' | 'RETENTION' | 'EDUCATION') => 
                               setFormData({...formData, goal: value})
                             }
                           >
-                            <SelectTrigger className="h-8">
+                            <SelectTrigger className="h-8 bg-[#2a2b2d] border-[#3a3b3d] text-[#f5f5f7]/80 rounded-md">
                               <SelectValue />
                             </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="SALES">Vendas</SelectItem>
-                              <SelectItem value="SUPPORT">Suporte</SelectItem>
-                              <SelectItem value="LEAD_GENERATION">Geração de Leads</SelectItem>
-                              <SelectItem value="QUALIFICATION">Qualificação</SelectItem>
-                              <SelectItem value="RETENTION">Retenção</SelectItem>
-                              <SelectItem value="EDUCATION">Educação</SelectItem>
+                            <SelectContent className="bg-[#2a2b2d] border-[#3a3b3d] text-[#f5f5f7]/80 rounded-md">
+                              <SelectItem value="SALES" className="text-[#f5f5f7]/80 hover:text-[#f5f5f7]">Sales</SelectItem>
+                              <SelectItem value="SUPPORT" className="text-[#f5f5f7]/80 hover:text-[#f5f5f7]">Support</SelectItem>
+                              <SelectItem value="LEAD_GENERATION" className="text-[#f5f5f7]/80 hover:text-[#f5f5f7]">Lead Generation</SelectItem>
+                              <SelectItem value="QUALIFICATION" className="text-[#f5f5f7]/80 hover:text-[#f5f5f7]">Qualification</SelectItem>
+                              <SelectItem value="RETENTION" className="text-[#f5f5f7]/80 hover:text-[#f5f5f7]">Retention</SelectItem>
+                              <SelectItem value="EDUCATION" className="text-[#f5f5f7]/80 hover:text-[#f5f5f7]">Education</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -885,24 +885,24 @@ export default function AIAgentPage() {
 
                       <div className="grid grid-cols-1 gap-3">
                         <div className="space-y-1.5">
-                          <Label className="text-gray-900 font-medium text-xs">Case de Sucesso (Opcional)</Label>
+                          <Label className="text-[#f5f5f7] text-xs">Success Case (Optional)</Label>
                           <Textarea
                             value={formData.successCase}
                             onChange={(e) => setFormData({...formData, successCase: e.target.value})}
-                            placeholder="Ex: Empresa X reduziu 50% do tempo em processos administrativos..."
+                            placeholder="Ex: Company X reduced administrative process time by 50%..."
                             rows={2}
-                            className="text-xs"
+                            className="text-xs bg-[#2a2b2d] border-[#3a3b3d] text-[#f5f5f7]/80 rounded-md placeholder:text-[#f5f5f7]/40"
                           />
                         </div>
 
                         <div className="space-y-1.5">
-                          <Label className="text-gray-900 font-medium text-xs">Resposta para Objeção de Preço (Opcional)</Label>
+                          <Label className="text-[#f5f5f7] text-xs">Price Objection Response (Optional)</Label>
                           <Textarea
                             value={formData.priceObjection}
                             onChange={(e) => setFormData({...formData, priceObjection: e.target.value})}
-                            placeholder="Ex: Nosso investimento se paga em 3 meses com a economia gerada..."
+                            placeholder="Ex: I understand your concern about the investment, but..."
                             rows={2}
-                            className="text-xs"
+                            className="text-xs bg-[#2a2b2d] border-[#3a3b3d] text-[#f5f5f7]/80 rounded-md placeholder:text-[#f5f5f7]/40"
                           />
                         </div>
                       </div>
@@ -921,38 +921,38 @@ export default function AIAgentPage() {
                           <button
                             type="button"
                             onClick={() => setPromptMode('auto')}
-                            className={`p-2 text-xs rounded-lg border transition-all ${
+                            className={`p-2 text-xs rounded-md border transition-all ${
                               promptMode === 'auto' 
-                                ? 'bg-blue-50 border-blue-200 text-blue-700' 
-                                : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100'
+                                ? 'bg-[#4a9eff]/20 border-[#4a9eff]/30 text-[#f5f5f7]' 
+                                : 'bg-[#2a2b2d] border-[#3a3b3d] text-[#f5f5f7]/70 hover:bg-[#3a3b3d]'
                             }`}
                           >
-                            <div className="font-medium">Automático</div>
-                            <div className="text-xs opacity-75">Baseado nos campos</div>
+                            <div className="font-medium">Automatic</div>
+                            <div className="text-xs opacity-75">Based on fields</div>
                           </button>
                           <button
                             type="button"
                             onClick={() => setPromptMode('template')}
-                            className={`p-2 text-xs rounded-lg border transition-all ${
+                            className={`p-2 text-xs rounded-md border transition-all ${
                               promptMode === 'template' 
-                                ? 'bg-blue-50 border-blue-200 text-blue-700' 
-                                : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100'
+                                ? 'bg-[#4a9eff]/20 border-[#4a9eff]/30 text-[#f5f5f7]' 
+                                : 'bg-[#2a2b2d] border-[#3a3b3d] text-[#f5f5f7]/70 hover:bg-[#3a3b3d]'
                             }`}
                           >
                             <div className="font-medium">Template</div>
-                            <div className="text-xs opacity-75">Pré-configurado</div>
+                            <div className="text-xs opacity-75">Pre-configured</div>
                           </button>
                           <button
                             type="button"
                             onClick={() => setPromptMode('custom')}
-                            className={`p-2 text-xs rounded-lg border transition-all ${
+                            className={`p-2 text-xs rounded-md border transition-all ${
                               promptMode === 'custom' 
-                                ? 'bg-blue-50 border-blue-200 text-blue-700' 
-                                : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100'
+                                ? 'bg-[#4a9eff]/20 border-[#4a9eff]/30 text-[#f5f5f7]' 
+                                : 'bg-[#2a2b2d] border-[#3a3b3d] text-[#f5f5f7]/70 hover:bg-[#3a3b3d]'
                             }`}
                           >
-                            <div className="font-medium">Customizado</div>
-                            <div className="text-xs opacity-75">Escrever próprio</div>
+                            <div className="font-medium">Custom</div>
+                            <div className="text-xs opacity-75">Write your own</div>
                           </button>
                         </div>
                       </div>
@@ -1128,12 +1128,12 @@ export default function AIAgentPage() {
               {/* Agents List */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                 {agents.map((agent) => (
-                  <Card key={agent.id} className="bg-gray-800/5 border-0 shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.16)] transition-all duration-300 rounded-2xl">
-                    <CardContent className="p-4">
+                  <Card key={agent.id} className="bg-[#2a2b2d]/50 border border-[#3a3b3d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md">
+                    <CardContent className="p-3">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex items-center gap-2">
                           <div className={`w-2 h-2 rounded-full ${agent.isActive ? 'bg-green-500' : 'bg-gray-400'}`} />
-                          <h3 className="font-semibold text-gray-900 tracking-[-0.03em] font-inter text-sm">
+                          <h3 className="font-semibold text-[#f5f5f7] tracking-[-0.03em] font-inter text-sm">
                             {agent.instance.instanceName}
                           </h3>
                         </div>
@@ -1142,7 +1142,7 @@ export default function AIAgentPage() {
                             variant="ghost"
                             size="sm"
                             onClick={() => handleEditAgent(agent)}
-                            className="h-6 w-6 p-0 hover:bg-gray-100"
+                            className="h-6 w-6 p-0 text-[#f5f5f7]/70 hover:bg-[#3a3b3d] hover:text-[#f5f5f7]"
                           >
                             <Edit className="h-3 w-3" />
                           </Button>
@@ -1150,7 +1150,7 @@ export default function AIAgentPage() {
                             variant="ghost"
                             size="sm"
                             onClick={() => deleteAgent(agent.id, agent.instance.instanceName)}
-                            className="h-6 w-6 p-0 hover:bg-red-100 hover:text-red-600"
+                            className="h-6 w-6 p-0 text-[#f5f5f7]/70 hover:bg-[#3a3b3d]/80 hover:text-[#ff6b6b]"
                           >
                             <Trash2 className="h-3 w-3" />
                           </Button>
@@ -1158,23 +1158,23 @@ export default function AIAgentPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <div className="flex items-center gap-2 text-xs text-gray-600">
+                        <div className="flex items-center gap-2 text-xs text-[#f5f5f7]/70">
                           <Bot className="h-3 w-3" />
                           <span>{agent.model}</span>
                         </div>
 
-                        <div className="flex items-center gap-2 text-xs text-gray-600">
+                        <div className="flex items-center gap-2 text-xs text-[#f5f5f7]/70">
                           <Zap className="h-3 w-3" />
                           <span>Max: {agent.maxTokens} tokens</span>
                         </div>
 
-                        <div className="flex items-center gap-2 text-xs text-gray-600">
+                        <div className="flex items-center gap-2 text-xs text-[#f5f5f7]/70">
                           <Clock className="h-3 w-3" />
                           <span>Temp: {agent.temperature}</span>
                         </div>
                       </div>
 
-                      <div className="mt-3 pt-3 border-t border-gray-200">
+                      <div className="mt-3 pt-3 border-t border-[#3a3b3d]/50">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-1">
                             <Switch
@@ -1182,13 +1182,13 @@ export default function AIAgentPage() {
                               onCheckedChange={(checked) => toggleAgent(agent.id, checked)}
                               className="data-[state=checked]:bg-green-500"
                             />
-                            <span className={`text-xs font-medium ${agent.isActive ? 'text-green-600' : 'text-gray-600'}`}>
-                              {agent.isActive ? 'Ativo' : 'Inativo'}
+                            <span className={`text-xs font-medium ${agent.isActive ? 'text-green-400' : 'text-[#f5f5f7]/70'}`}>
+                              {agent.isActive ? 'Active' : 'Inactive'}
                             </span>
                           </div>
                           <Badge 
                             variant={agent.isActive ? "default" : "secondary"}
-                            className={`text-xs ${agent.isActive ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-gray-200 text-gray-600'}`}
+                            className={`text-xs ${agent.isActive ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-[#3a3b3d] text-[#f5f5f7]/70'}`}
                           >
                             {agent.isActive ? 'Online' : 'Offline'}
                           </Badge>
@@ -1421,30 +1421,30 @@ export default function AIAgentPage() {
         </div>
       </div>
 
-      {/* Modal de Edição */}
+      {/* Edit Modal */}
       <Dialog open={showEditForm} onOpenChange={setShowEditForm}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-white border border-gray-300 shadow-2xl">
-          <DialogHeader className="bg-gradient-to-r from-gray-900 to-gray-800 text-white p-6 -m-6 mb-6 rounded-t-lg">
-            <DialogTitle className="flex items-center gap-2 text-white tracking-[-0.03em] font-inter">
-              <Edit className="h-5 w-5" />
-              Editar Agente: {editingAgent?.instance.instanceName}
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-[#1c1d20] border border-[#2a2b2d] shadow-md">
+          <DialogHeader className="bg-[#2a2b2d] text-[#f5f5f7] p-4 -m-6 mb-6 rounded-t-sm">
+            <DialogTitle className="flex items-center gap-2 text-[#f5f5f7] tracking-[-0.03em]">
+              <Edit className="h-4 w-4" />
+              Edit Agent: {editingAgent?.instance.instanceName}
             </DialogTitle>
-            <DialogDescription className="text-gray-200 tracking-[-0.03em] font-inter">
-              Modifique as configurações do agente de IA
+            <DialogDescription className="text-[#f5f5f7]/60 tracking-[-0.03em] text-xs">
+              Modify your AI agent settings
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-6 px-1">
+          <div className="space-y-4 px-1">
             {/* Status */}
-            <div className="flex items-center space-x-2 p-4 bg-gray-50 rounded-lg border">
+            <div className="flex items-center space-x-2 p-3 bg-[#2a2b2d]/50 rounded-sm border border-[#3a3b3d]/30">
               <Switch
                 id="edit-active"
                 checked={editFormData.isActive}
                 onCheckedChange={(checked) => setEditFormData(prev => ({ ...prev, isActive: checked }))}
-                className="data-[state=checked]:bg-green-500"
+                className="data-[state=checked]:bg-[#4a9eff]"
               />
-              <Label htmlFor="edit-active" className="text-gray-900 font-medium">
-                Agente Ativo
+              <Label htmlFor="edit-active" className="text-[#f5f5f7] text-xs">
+                Agent Active
               </Label>
             </div>
 
@@ -1757,28 +1757,20 @@ export default function AIAgentPage() {
             </div>
           </div>
 
-          <DialogFooter className="bg-gray-50 p-6 -m-6 mt-6 rounded-b-lg border-t">
-            <Button
-              variant="outline"
+          <DialogFooter className="mt-4">
+            <Button 
+              variant="outline" 
               onClick={() => setShowEditForm(false)}
-              disabled={loading}
-              className="border-gray-300 text-gray-700 hover:bg-gray-100"
+              className="bg-transparent hover:bg-[#2a2b2d] text-[#f5f5f7]/70 border-[#3a3b3d] text-xs rounded-sm h-7"
             >
-              Cancelar
+              Cancel
             </Button>
-            <Button
+            <Button 
               onClick={editAgent}
+              className="bg-[#4a9eff] hover:bg-[#3a8eff] text-white text-xs rounded-sm h-7"
               disabled={loading}
-              className="bg-gray-900 hover:bg-gray-800 text-white shadow-lg"
             >
-              {loading ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Salvando...
-                </>
-              ) : (
-                'Salvar Alterações'
-              )}
+              {loading ? 'Saving...' : 'Save Changes'}
             </Button>
           </DialogFooter>
         </DialogContent>

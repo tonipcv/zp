@@ -291,10 +291,10 @@ export function WhatsAppInstances() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'CONNECTED': return 'bg-teal-500';
-      case 'CONNECTING': return 'bg-purple-400';
-      case 'DISCONNECTED': return 'bg-purple-300';
-      default: return 'bg-purple-200';
+      case 'CONNECTED': return 'bg-[#10b981]';
+      case 'CONNECTING': return 'bg-[#8b5cf6]';
+      case 'DISCONNECTED': return 'bg-[#a78bfa]';
+      default: return 'bg-[#c4b5fd]';
     }
   };
 
@@ -310,41 +310,41 @@ export function WhatsAppInstances() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-700"></div>
+      <div className="flex items-center justify-center min-h-[300px]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#f5f5f7]/60"></div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-4">
+    <div>
       {/* Action Button */}
       <div className="flex justify-end">
         <div className="flex gap-2">
           <Button 
             onClick={() => setCreateDialogOpen(true)}
-            className="h-8 sm:h-7 bg-gray-800/5 border-0 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)] transition-all duration-300 rounded-2xl text-gray-700 hover:bg-gray-800/10 text-xs sm:text-xs"
+            className="h-9 w-9 p-0 bg-[#2a2b2d] border-0 transition-all duration-200 rounded-md text-[#f5f5f7] hover:bg-[#2a2b2d]/80"
+            title="New Instance"
           >
-            <Plus className="h-3 w-3 mr-1.5" />
-            Nova Instância
+            <Plus className="h-4 w-4" />
           </Button>
         </div>
       </div>
 
       {/* Instances Grid */}
       {instances.length === 0 ? (
-        <Card className="bg-gray-800/5 border-0 shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.16)] transition-all duration-300 rounded-2xl">
-          <CardContent className="p-6 text-center">
-            <Smartphone className="h-8 w-8 text-gray-600 mx-auto mb-3" />
-            <h3 className="text-base font-semibold text-gray-900 mb-2 tracking-[-0.03em] font-inter">
+        <Card className="bg-[#2a2b2d]/50 border-0 transition-all duration-200 rounded-md">
+          <CardContent className="p-4 text-center">
+            <Smartphone className="h-6 w-6 text-[#f5f5f7]/60 mx-auto mb-2" />
+            <h3 className="text-sm font-medium text-[#f5f5f7] mb-2 tracking-[-0.03em]">
               Nenhuma instância criada
             </h3>
-            <p className="text-gray-600 mb-4 text-xs tracking-[-0.03em] font-inter">
+            <p className="text-[#f5f5f7]/60 mb-3 text-xs tracking-[-0.03em]">
               Crie sua primeira instância do WhatsApp Business para começar a gerenciar suas conversas
             </p>
             <Button 
               onClick={() => setCreateDialogOpen(true)}
-              className="bg-gray-800/5 border-0 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)] transition-all duration-300 rounded-2xl text-gray-700 hover:bg-gray-800/10 h-8 text-xs"
+              className="bg-[#2a2b2d] border-0 transition-all duration-200 rounded-md text-[#f5f5f7] hover:bg-[#2a2b2d]/80 h-7 text-xs"
             >
               <Plus className="h-3 w-3 mr-1.5" />
               Criar Primeira Instância
@@ -352,174 +352,157 @@ export function WhatsAppInstances() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
           {instances.map((instance) => {
             const webhookInfo = webhookStatus[instance.instanceName];
             
             return (
               <Card 
                 key={instance.id} 
-                className="bg-gray-800/5 border-0 shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.16)] transition-all duration-300 rounded-2xl"
+                className="bg-[#2a2b2d]/50 border-0 transition-all duration-200 rounded-md"
               >
-                <CardHeader className="pb-3">
+                <CardHeader className="pb-2 pt-3 px-3">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center">
-                        <Smartphone className="h-4 w-4 text-gray-700" />
+                    <div className="flex items-center space-x-2">
+                      <div className="w-6 h-6 bg-[#1c1d20] rounded-md flex items-center justify-center">
+                        <Smartphone className="h-3 w-3 text-[#f5f5f7]/60" />
                       </div>
                       <div>
-                        <CardTitle className="text-gray-900 text-sm font-semibold tracking-[-0.03em] font-inter">
+                        <CardTitle className="text-[#f5f5f7] text-xs font-medium tracking-[-0.03em]">
                           {instance.instanceName}
                         </CardTitle>
                         {instance.connectedNumber && (
-                          <CardDescription className="text-gray-600 text-xs tracking-[-0.03em] font-inter">
+                          <CardDescription className="text-[#f5f5f7]/60 text-xs tracking-[-0.03em]">
                             {instance.connectedNumber}
                           </CardDescription>
                         )}
                       </div>
                     </div>
                     <Badge 
-                      className={`${getStatusColor(instance.status)} text-white text-xs px-2 py-1 rounded-full border-0`}
+                      className={`${getStatusColor(instance.status)} text-[#f5f5f7] text-xs px-2 py-0.5 rounded-md border-0`}
                     >
                       {getStatusText(instance.status)}
                     </Badge>
                   </div>
                 </CardHeader>
                 
-                <CardContent className="space-y-3">
+                <CardContent className="space-y-2 px-3 py-2">
                   {/* Stats */}
                   <div className="grid grid-cols-2 gap-2">
-                    <div className="bg-gray-100/50 p-2 rounded-lg text-center">
-                      <div className="text-sm font-bold text-gray-900">
-                        {instance._count.messages}
-                      </div>
-                      <div className="text-xs text-gray-600">Mensagens</div>
-                    </div>
-                    <div className="bg-gray-100/50 p-2 rounded-lg text-center">
-                      <div className="text-sm font-bold text-gray-900">
-                        {instance.status === 'CONNECTED' ? 'Online' : 'Offline'}
-                      </div>
-                      <div className="text-xs text-gray-600">Status</div>
-                    </div>
-                  </div>
-
-                  {/* Webhook Warning */}
-                  {webhookInfo && !webhookInfo.isCorrect && (
-                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
-                      <div className="flex items-start space-x-2">
-                        <div className="flex-shrink-0">
-                          <AlertTriangle className="h-4 w-4 text-amber-600 mt-0.5" />
-                        </div>
-                        <div className="flex-1">
-                          <h4 className="text-xs font-medium text-amber-800">
-                            Webhook incorreto
-                          </h4>
-                          <p className="text-xs text-amber-700 mt-1">
-                            Esta instância precisa do webhook correto para funcionar adequadamente.
-                          </p>
-                          <Button
-                            size="sm"
-                            onClick={() => handleConfigureWebhook(instance)}
-                            className="mt-2 h-6 bg-amber-600 hover:bg-amber-700 text-white text-xs px-2 rounded"
-                          >
-                            Corrigir Agora
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Webhook OK Indicator */}
-                  {webhookInfo && webhookInfo.isCorrect && (
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-2">
-                      <div className="flex items-center space-x-2">
-                        <CheckCircle className="h-4 w-4 text-green-600" />
-                        <span className="text-xs font-medium text-green-800">
-                          Webhook configurado corretamente
+                    <div className="bg-[#1c1d20] p-2 rounded-md text-center">
+                      <div className="flex items-center justify-center gap-1.5">
+                        <MessageSquare className="h-3 w-3 text-[#f5f5f7]/60" />
+                        <span className="text-xs font-medium text-[#f5f5f7]">
+                          {instance._count.messages}
                         </span>
                       </div>
                     </div>
+                    <div className="bg-[#1c1d20] p-2 rounded-md text-center">
+                      <div className="text-xs font-medium text-[#f5f5f7]">
+                        {instance.status === 'CONNECTED' ? 'Online' : 'Offline'}
+                      </div>
+                      <div className="text-xs text-[#f5f5f7]/60">Status</div>
+                    </div>
+                  </div>
+
+                  {/* Webhook Status */}
+                  {webhookInfo && (
+                    <div className="bg-[#1c1d20] p-2 rounded-md">
+                      <div className="flex items-center justify-between">
+                        <div className="text-xs text-[#f5f5f7]/60">Webhook:</div>
+                        {webhookInfo.isCorrect ? (
+                          <div className="flex items-center text-[#6ee7b7] text-xs">
+                            <CheckCircle className="h-3 w-3 mr-1" />
+                            Configurado
+                          </div>
+                        ) : (
+                          <div className="flex items-center text-[#fcd34d] text-xs">
+                            <AlertTriangle className="h-3 w-3 mr-1" />
+                            Incorreto
+                          </div>
+                        )}
+                      </div>
+                      
+                      {!webhookInfo.isCorrect && (
+                        <div className="mt-1">
+                          <Button 
+                            size="sm" 
+                            onClick={() => fixWebhook(instance.instanceName)}
+                            className="w-full h-6 text-[10px] bg-[#2a2b2d] hover:bg-[#2a2b2d]/80 text-[#f5f5f7]"
+                          >
+                            Corrigir Webhook
+                          </Button>
+                        </div>
+                      )}
+                    </div>
                   )}
 
-                  {/* Action Buttons */}
-                  <div className="grid grid-cols-2 gap-1.5">
+                  {/* Actions */}
+                  <div className="flex flex-wrap gap-1 justify-center">
                     {instance.status !== 'CONNECTED' && (
-                      <Button
-                        variant="outline"
-                        size="sm"
+                      <Button 
+                        size="sm" 
                         onClick={() => handleShowQRCode(instance)}
-                        className="h-7 bg-gray-800/5 border-0 shadow-[0_2px_8px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-all duration-300 rounded-xl text-gray-700 hover:bg-gray-800/10 text-xs"
+                        className="h-8 w-8 p-0 bg-[#1c1d20] border-0 transition-all duration-200 rounded-md text-[#f5f5f7]/80 hover:bg-[#1c1d20]/80 hover:text-[#f5f5f7]"
+                        title="QR Code"
                       >
-                        <QrCode className="h-3 w-3 mr-1" />
-                        QR Code
+                        <QrCode className="h-4 w-4" />
                       </Button>
                     )}
                     
-                    <Button
-                      variant="outline"
-                      size="sm"
+                    <Button 
+                      size="sm" 
                       onClick={() => handleCheckStatus(instance)}
-                      className="h-7 bg-gray-800/5 border-0 shadow-[0_2px_8px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-all duration-300 rounded-xl text-gray-700 hover:bg-gray-800/10 text-xs"
+                      className="h-8 w-8 p-0 bg-[#1c1d20] border-0 transition-all duration-200 rounded-md text-[#f5f5f7]/80 hover:bg-[#1c1d20]/80 hover:text-[#f5f5f7]"
+                      title="Check Status"
                     >
-                      <RefreshCw className="h-3 w-3 mr-1" />
-                      Sync
+                      <RefreshCw className="h-4 w-4" />
                     </Button>
-
-                    {/* Botão de Restart para instâncias em CONNECTING */}
-                    {instance.status === 'CONNECTING' && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleRestart(instance)}
-                        className="h-7 bg-orange-50 border-0 shadow-[0_2px_8px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-all duration-300 rounded-xl text-orange-700 hover:bg-orange-100 text-xs"
-                      >
-                        <RefreshCw className="h-3 w-3 mr-1" />
-                        Restart
-                      </Button>
-                    )}
-
-                    {instance.status === 'CONNECTED' && (
-                      <>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleSendMessage(instance)}
-                          className="h-7 bg-teal-50 border-0 shadow-[0_2px_8px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-all duration-300 rounded-xl text-teal-700 hover:bg-teal-100 text-xs"
-                        >
-                          <Send className="h-3 w-3 mr-1" />
-                          Enviar
-                        </Button>
-                        
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleSync(instance)}
-                          className="h-7 bg-purple-50 border-0 shadow-[0_2px_8px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-all duration-300 rounded-xl text-purple-700 hover:bg-purple-100 text-xs"
-                        >
-                          <MessageSquare className="h-3 w-3 mr-1" />
-                          Sync
-                        </Button>
-                        
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleViewData(instance)}
-                          className="h-7 bg-teal-50 border-0 shadow-[0_2px_8px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-all duration-300 rounded-xl text-teal-700 hover:bg-teal-100 text-xs"
-                        >
-                          <Eye className="h-3 w-3 mr-1" />
-                          Dados
-                        </Button>
-                      </>
-                    )}
-
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleDeleteInstance(instance)}
-                      className="h-7 bg-purple-50 border-0 shadow-[0_2px_8px_rgba(0,0,0,0.05)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.1)] transition-all duration-300 rounded-xl text-purple-700 hover:bg-purple-100 text-xs"
+                    
+                    <Button 
+                      size="sm" 
+                      onClick={() => handleSendMessage(instance)}
+                      className="h-8 w-8 p-0 bg-[#1c1d20] border-0 transition-all duration-200 rounded-md text-[#f5f5f7]/80 hover:bg-[#1c1d20]/80 hover:text-[#f5f5f7]"
+                      disabled={instance.status !== 'CONNECTED'}
+                      title="Send Message"
                     >
-                      <Trash2 className="h-3 w-3 mr-1" />
-                      Deletar
+                      <Send className="h-4 w-4" />
+                    </Button>
+                    
+                    <Button 
+                      size="sm" 
+                      onClick={() => handleViewData(instance)}
+                      className="h-8 w-8 p-0 bg-[#1c1d20] border-0 transition-all duration-200 rounded-md text-[#f5f5f7]/80 hover:bg-[#1c1d20]/80 hover:text-[#f5f5f7]"
+                      title="View Data"
+                    >
+                      <Eye className="h-4 w-4" />
+                    </Button>
+                    
+                    <Button 
+                      size="sm" 
+                      onClick={() => handleSync(instance)}
+                      className="h-8 w-8 p-0 bg-[#1c1d20] border-0 transition-all duration-200 rounded-md text-[#f5f5f7]/80 hover:bg-[#1c1d20]/80 hover:text-[#f5f5f7]"
+                      title="Sync"
+                    >
+                      <Settings className="h-4 w-4" />
+                    </Button>
+                    
+                    <Button 
+                      size="sm" 
+                      onClick={() => handleRestart(instance)}
+                      className="h-8 w-8 p-0 bg-[#1c1d20] border-0 transition-all duration-200 rounded-md text-[#f5f5f7]/80 hover:bg-[#1c1d20]/80 hover:text-[#f5f5f7]"
+                      title="Restart"
+                    >
+                      <RefreshCw className="h-4 w-4" />
+                    </Button>
+                    
+                    <Button 
+                      size="sm" 
+                      onClick={() => handleDeleteInstance(instance)}
+                      className="h-8 w-8 p-0 bg-[#1c1d20] border-0 transition-all duration-200 rounded-md text-[#f44336]/80 hover:bg-[#1c1d20]/80 hover:text-[#f44336]"
+                      title="Delete"
+                    >
+                      <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
 

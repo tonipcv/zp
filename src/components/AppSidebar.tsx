@@ -42,37 +42,37 @@ const menuItems = [
     title: "WhatsApp",
     items: [
       {
-        title: "Instâncias",
+        title: "Instances",
         url: "/whatsapp",
         icon: MessageSquare,
       },
     ],
   },
   {
-    title: "IA",
+    title: "AI",
     items: [
       {
-        title: "Agente IA",
+        title: "AI Agent",
         url: "/ai-agent",
         icon: Bot,
       },
       {
-        title: "Conhecimento",
+        title: "Knowledge",
         url: "/ai-agent/knowledge",
         icon: BookOpen,
       },
     ],
   },
   {
-    title: "Configurações",
+    title: "Settings",
     items: [
       {
-        title: "Perfil",
+        title: "Profile",
         url: "/profile",
         icon: User,
       },
       {
-        title: "Planos",
+        title: "Plans",
         url: "/planos",
         icon: CreditCard,
       },
@@ -98,30 +98,21 @@ export function AppSidebar() {
   };
 
   return (
-    <Sidebar variant="inset" className="border-r border-gray-200/50 bg-gradient-to-b from-gray-50 to-gray-100 shadow-[1px_0_5px_rgba(0,0,0,0.05)]">
-      <SidebarHeader className="border-b border-gray-200/50 bg-white/20 backdrop-blur-sm">
-        <div className="flex items-center justify-center px-3 py-3">
-          <div className="flex items-center gap-3">
-            <div className="relative w-8 h-8 grayscale">
-              <Image
-                src="/logo.png"
-                alt="Logo"
-                fill
-                className="object-contain"
-                priority
-              />
-            </div>
-            <span className="text-sm font-medium text-gray-900 tracking-tight group-data-[collapsible=icon]:hidden">
-              HTPS.io
+    <Sidebar variant="sidebar" className="border-none bg-[#1c1d20]" style={{"--sidebar-width": "11rem"} as React.CSSProperties}>
+      <SidebarHeader className="border-none bg-[#1c1d20]">
+        <div className="flex items-center px-3 py-3">
+          <div className="flex items-center">
+            <span className="text-xs font-medium text-[#f5f5f7] tracking-tight">
+              Cxlus AI
             </span>
           </div>
         </div>
       </SidebarHeader>
       
-      <SidebarContent className="bg-transparent py-2">
+      <SidebarContent className="bg-transparent py-1">
         {menuItems.map((group) => (
-          <SidebarGroup key={group.title} className="px-2 py-1">
-            <SidebarGroupLabel className="text-[10px] font-semibold text-gray-600/70 uppercase tracking-wider px-2 mb-1">
+          <SidebarGroup key={group.title} className="px-1.5 py-1.5">
+            <SidebarGroupLabel className="text-[10px] font-medium text-[#f5f5f7]/60 px-2 pb-1">
               {group.title}
             </SidebarGroupLabel>
             <SidebarGroupContent>
@@ -131,10 +122,11 @@ export function AppSidebar() {
                     <SidebarMenuButton 
                       asChild
                       isActive={pathname ? (pathname === item.url || pathname.startsWith(item.url + '/')) : false}
-                      className="h-7 px-2 rounded-md text-xs font-medium tracking-[-0.01em] transition-all duration-200 data-[active=true]:bg-white/90 data-[active=true]:text-gray-900 data-[active=true]:shadow-sm hover:bg-white/40 text-gray-700"
+                      className="h-7 w-full flex items-center px-2 rounded-md text-xs transition-all duration-200 data-[active=true]:bg-[#2a2b2d] data-[active=true]:text-[#f5f5f7] hover:bg-[#2a2b2d]/50 text-[#f5f5f7]/80"
+                      aria-label={item.title}
                     >
-                      <Link href={item.url} className="flex items-center gap-2">
-                        <item.icon className="h-3.5 w-3.5 stroke-[1.5] flex-shrink-0" />
+                      <Link href={item.url} className="flex items-center w-full">
+                        <item.icon className="h-3.5 w-3.5 stroke-[1.5] flex-shrink-0 mr-2" />
                         <span>{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
@@ -146,18 +138,17 @@ export function AppSidebar() {
         ))}
       </SidebarContent>
       
-      <SidebarFooter className="border-t border-gray-200/50 bg-white/20 p-2">
+      <SidebarFooter className="border-none bg-[#1c1d20] p-1.5">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton 
-              className="h-7 px-2 rounded-md text-xs font-medium tracking-[-0.01em] text-red-600 hover:bg-red-50/80 hover:text-red-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="h-7 w-full flex items-center px-2 rounded-md text-xs text-[#f5f5f7]/80 hover:bg-[#2a2b2d]/50 hover:text-[#f5f5f7] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={handleLogout}
               disabled={isLoggingOut}
+              aria-label="Logout"
             >
-              <div className="flex items-center gap-2 w-full">
-                <LogOut className="h-3.5 w-3.5 stroke-[1.5]" />
-                <span>{isLoggingOut ? 'Saindo...' : 'Sair'}</span>
-              </div>
+              <LogOut className="h-3.5 w-3.5 stroke-[1.5] mr-2" />
+              <span>Logout</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -173,34 +164,25 @@ interface AppLayoutProps {
 export function AppLayout({ children }: AppLayoutProps) {
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-gray-50">
+      <div className="flex min-h-screen w-full bg-[#1c1d20]">
         <AppSidebar />
         <main className="flex-1 flex flex-col">
-          <header className="flex h-12 items-center gap-4 border-b border-gray-200/50 bg-gradient-to-r from-gray-50 to-gray-100 shadow-[0_1px_3px_rgba(0,0,0,0.05)] px-4">
-            <SidebarTrigger className="md:hidden" />
+          <header className="flex h-8 items-center gap-1 border-none bg-[#1c1d20] px-2">
+            <SidebarTrigger className="md:hidden text-[#f5f5f7]/60 hover:text-[#f5f5f7]" />
             
             {/* Logo no mobile */}
-            <div className="flex items-center gap-2 md:hidden">
-              <div className="relative w-6 h-6 grayscale">
-                <Image
-                  src="/logo.png"
-                  alt="Logo"
-                  fill
-                  className="object-contain"
-                  priority
-                />
-              </div>
-              <span className="text-sm font-medium text-gray-900 tracking-tight">
-                HTPS.io
+            <div className="flex items-center md:hidden">
+              <span className="text-xs font-medium text-[#f5f5f7] tracking-tight">
+                -
               </span>
             </div>
             
             <div className="flex-1" />
-            <Button variant="ghost" size="icon" className="hover:bg-white/40 h-8 w-8">
-              <Settings className="h-4 w-4 text-gray-600" />
+            <Button variant="ghost" size="icon" className="hover:bg-[#2a2b2d]/50 h-5 w-5 text-[#f5f5f7]/60 hover:text-[#f5f5f7]">
+              <Settings className="h-3 w-3" />
             </Button>
           </header>
-          <div className="flex-1 p-4 bg-gray-50">
+          <div className="flex-1 bg-[#1c1d20]">
             {children}
           </div>
         </main>

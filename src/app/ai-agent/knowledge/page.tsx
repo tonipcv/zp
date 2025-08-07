@@ -278,7 +278,7 @@ export default function KnowledgePage() {
 
   return (
     <AppLayout>
-      <div className="min-h-[100dvh] bg-gray-100 pt-4 pb-8 px-2">
+      <div className="bg-[#1c1d20] pt-4 pb-8 px-2">
         <div className="container mx-auto pl-1 sm:pl-2 md:pl-4 lg:pl-8 max-w-[99%] sm:max-w-[97%] md:max-w-[95%] lg:max-w-[92%]">
           {/* Header */}
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4">
@@ -289,11 +289,11 @@ export default function KnowledgePage() {
                 </Button>
               </Link>
               <div>
-                <h1 className="text-lg sm:text-base md:text-lg font-bold text-gray-900 tracking-[-0.03em] font-inter">
-                  Base de Conhecimento
+                <h1 className="text-lg sm:text-base md:text-lg font-bold text-[#f5f5f7] tracking-[-0.03em] font-inter">
+                  Knowledge Base
                 </h1>
-                <p className="text-xs sm:text-xs md:text-xs text-gray-600 tracking-[-0.03em] font-inter">
-                  Gerencie o conhecimento dos seus agentes IA
+                <p className="text-xs sm:text-xs md:text-xs text-[#f5f5f7]/70 tracking-[-0.03em] font-inter">
+                  Manage your AI agents' knowledge
                 </p>
               </div>
             </div>
@@ -302,27 +302,27 @@ export default function KnowledgePage() {
               <Button 
                 onClick={() => setShowCreateForm(true)}
                 disabled={!selectedAgent}
-                className="h-8 sm:h-7 bg-gray-800/5 border-0 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)] transition-all duration-300 rounded-2xl text-gray-700 hover:bg-gray-800/10 text-xs sm:text-xs"
+                className="h-8 sm:h-7 bg-[#3a3b3d] border border-[#4a4b4d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md text-[#f5f5f7] hover:bg-[#4a4b4d] text-xs sm:text-xs"
               >
                 <Plus className="h-3 w-3 mr-1.5" />
-                Novo Conhecimento
+                New Knowledge
               </Button>
             </div>
           </div>
 
           {agents.length === 0 ? (
-            <Card className="bg-gray-800/5 border-0 shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.16)] transition-all duration-300 rounded-2xl">
+            <Card className="bg-[#2a2b2d]/50 border border-[#3a3b3d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md">
               <CardContent className="p-6 text-center">
-                <Brain className="h-8 w-8 text-gray-600 mx-auto mb-3" />
-                <h3 className="text-base font-semibold text-gray-900 mb-2 tracking-[-0.03em] font-inter">
-                  Nenhum agente encontrado
+                <Brain className="h-8 w-8 text-[#f5f5f7]/70 mx-auto mb-3" />
+                <h3 className="text-base font-semibold text-[#f5f5f7] mb-2 tracking-[-0.03em] font-inter">
+                  No agents found
                 </h3>
-                <p className="text-gray-600 mb-4 text-xs tracking-[-0.03em] font-inter">
-                  Você precisa criar um agente primeiro para adicionar conhecimento.
+                <p className="text-[#f5f5f7]/70 mb-4 text-xs tracking-[-0.03em] font-inter">
+                  You need to create an agent first to add knowledge.
                 </p>
                 <Link href="/ai-agent">
-                  <Button className="bg-gray-800/5 border-0 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)] transition-all duration-300 rounded-2xl text-gray-700 hover:bg-gray-800/10 h-8 text-xs">
-                    Criar Agente
+                  <Button className="bg-[#3a3b3d] border border-[#4a4b4d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md text-[#f5f5f7] hover:bg-[#4a4b4d] h-8 text-xs">
+                    Create Agent
                   </Button>
                 </Link>
               </CardContent>
@@ -330,17 +330,17 @@ export default function KnowledgePage() {
           ) : (
             <>
               {/* Agent Selector */}
-              <Card className="bg-gray-800/5 border-0 shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.16)] transition-all duration-300 rounded-2xl mb-4">
+              <Card className="bg-[#2a2b2d]/50 border border-[#3a3b3d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md mb-4">
                 <CardContent className="p-4">
                   <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                    <Label className="text-gray-900 font-medium text-xs">Agente Selecionado:</Label>
+                    <Label className="text-[#f5f5f7] font-medium text-xs">Selected Agent:</Label>
                     <Select value={selectedAgent} onValueChange={setSelectedAgent}>
-                      <SelectTrigger className="w-full sm:w-[300px] h-8">
+                      <SelectTrigger className="w-full sm:w-[300px] h-8 bg-[#3a3b3d] border-[#4a4b4d]/30 text-[#f5f5f7]">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-[#2a2b2d] border-[#3a3b3d] text-[#f5f5f7]">
                         {agents.map((agent) => (
-                          <SelectItem key={agent.id} value={agent.id}>
+                          <SelectItem key={agent.id} value={agent.id} className="text-[#f5f5f7] hover:bg-[#3a3b3d]">
                             {agent.instance.instanceName} 
                             {agent.companyName && ` - ${agent.companyName}`}
                           </SelectItem>
@@ -357,14 +357,14 @@ export default function KnowledgePage() {
                   const config = typeConfig[type as KnowledgeType];
                   const Icon = config.icon;
                   return (
-                    <Card key={type} className="bg-gray-800/5 border-0 shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.16)] transition-all duration-300 rounded-2xl">
+                    <Card key={type} className="bg-[#2a2b2d]/50 border border-[#3a3b3d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md">
                       <CardContent className="p-3">
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="text-xs text-gray-600">{config.label}</p>
-                            <p className="text-lg font-bold text-gray-900">{count}</p>
+                            <p className="text-xs text-[#f5f5f7]/70">{config.label}</p>
+                            <p className="text-lg font-bold text-[#f5f5f7]">{count}</p>
                           </div>
-                          <Icon className="h-4 w-4 text-gray-600" />
+                          <Icon className="h-4 w-4 text-[#f5f5f7]/70" />
                         </div>
                       </CardContent>
                     </Card>
@@ -373,29 +373,29 @@ export default function KnowledgePage() {
               </div>
 
               {/* Search and Filters */}
-              <Card className="bg-gray-800/5 border-0 shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.16)] transition-all duration-300 rounded-2xl mb-4">
+              <Card className="bg-[#2a2b2d]/50 border border-[#3a3b3d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md mb-4">
                 <CardContent className="p-4">
                   <div className="flex flex-col md:flex-row gap-3">
                     <div className="flex-1">
                       <div className="relative">
-                        <Search className="absolute left-2 top-2 h-3 w-3 text-gray-400" />
+                        <Search className="absolute left-2 top-2 h-3 w-3 text-[#f5f5f7]/70" />
                         <Input
-                          placeholder="Buscar por título, conteúdo ou tags..."
+                          placeholder="Search by title, content or tags..."
                           value={searchTerm}
                           onChange={(e) => setSearchTerm(e.target.value)}
-                          className="pl-7 h-8 text-xs"
+                          className="pl-7 h-8 text-xs bg-[#3a3b3d] border-[#4a4b4d]/30 text-[#f5f5f7] placeholder:text-[#f5f5f7]/50"
                         />
                       </div>
                     </div>
                     <div className="w-full md:w-48">
                       <Select value={filterType} onValueChange={(value) => setFilterType(value as any)}>
-                        <SelectTrigger className="h-8">
+                        <SelectTrigger className="h-8 bg-[#3a3b3d] border-[#4a4b4d]/30 text-[#f5f5f7]">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="ALL">Todos os tipos</SelectItem>
+                        <SelectContent className="bg-[#2a2b2d] border-[#3a3b3d] text-[#f5f5f7]">
+                          <SelectItem value="ALL" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">All types</SelectItem>
                           {Object.entries(typeConfig).map(([type, config]) => (
-                            <SelectItem key={type} value={type}>
+                            <SelectItem key={type} value={type} className="text-[#f5f5f7] hover:bg-[#3a3b3d]">
                               {config.emoji} {config.label}
                             </SelectItem>
                           ))}
@@ -409,24 +409,24 @@ export default function KnowledgePage() {
               {/* Knowledge List */}
               <div className="space-y-4">
                 {filteredChunks.length === 0 ? (
-                  <Card className="bg-gray-800/5 border-0 shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.16)] transition-all duration-300 rounded-2xl">
+                  <Card className="bg-[#2a2b2d]/50 border border-[#3a3b3d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md">
                     <CardContent className="p-8 text-center">
-                      <Brain className="h-12 w-12 text-gray-600 mx-auto mb-4" />
-                      <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                        {chunks.length === 0 ? 'Nenhum conhecimento adicionado' : 'Nenhum resultado encontrado'}
+                      <Brain className="h-12 w-12 text-[#f5f5f7]/70 mx-auto mb-4" />
+                      <h3 className="text-lg font-semibold text-[#f5f5f7] mb-2">
+                        {chunks.length === 0 ? 'No knowledge added' : 'No results found'}
                       </h3>
-                      <p className="text-gray-600 mb-4">
+                      <p className="text-[#f5f5f7]/70 mb-4">
                         {chunks.length === 0 
-                          ? 'Adicione conhecimento específico para tornar seu agente mais inteligente.'
-                          : 'Tente ajustar os filtros ou termo de busca.'
+                          ? 'Add specific knowledge to make your agent smarter.'
+                          : 'Try adjusting filters or search term.'
                         }
                       </p>
                       {chunks.length === 0 && (
                         <Button 
                           onClick={() => setShowCreateForm(true)}
-                          className="bg-gray-800/5 border-0 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)] transition-all duration-300 rounded-2xl text-gray-700 hover:bg-gray-800/10"
+                          className="bg-[#3a3b3d] border border-[#4a4b4d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md text-[#f5f5f7] hover:bg-[#4a4b4d]"
                         >
-                          Adicionar Primeiro Conhecimento
+                          Add First Knowledge
                         </Button>
                       )}
                     </CardContent>
@@ -436,12 +436,12 @@ export default function KnowledgePage() {
                     const config = typeConfig[chunk.type];
                     const Icon = config.icon;
                     return (
-                      <Card key={chunk.id} className="bg-gray-800/5 border-0 shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.16)] transition-all duration-300 rounded-2xl">
+                      <Card key={chunk.id} className="bg-[#2a2b2d]/50 border border-[#3a3b3d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md">
                         <CardContent className="p-6">
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
                               <div className="flex items-center gap-3 mb-3">
-                                <Badge className={config.color}>
+                                <Badge className={`${config.color} text-[#f5f5f7]`}>
                                   <Icon className="h-3 w-3 mr-1" />
                                   {config.label}
                                 </Badge>
@@ -450,33 +450,33 @@ export default function KnowledgePage() {
                                     <div
                                       key={i}
                                       className={`w-2 h-2 rounded-full ${
-                                        i < chunk.priority ? 'bg-yellow-400' : 'bg-gray-200'
+                                        i < chunk.priority ? 'bg-yellow-400' : 'bg-[#4a4b4d]'
                                       }`}
                                     />
                                   ))}
                                 </div>
                               </div>
                               
-                              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                              <h3 className="text-lg font-semibold text-[#f5f5f7] mb-2">
                                 {chunk.title}
                               </h3>
                               
-                              <p className="text-gray-600 mb-3 line-clamp-3">
+                              <p className="text-[#f5f5f7]/70 mb-3 line-clamp-3">
                                 {chunk.content}
                               </p>
                               
                               {chunk.tags && (
                                 <div className="flex flex-wrap gap-1 mb-3">
                                   {chunk.tags.split(',').map((tag, index) => (
-                                    <Badge key={index} variant="outline" className="text-xs">
+                                    <Badge key={index} variant="outline" className="text-xs text-[#f5f5f7] border-[#4a4b4d]">
                                       {tag.trim()}
                                     </Badge>
                                   ))}
                                 </div>
                               )}
                               
-                              <p className="text-xs text-gray-600">
-                                Criado em {new Date(chunk.createdAt).toLocaleDateString('pt-BR')}
+                              <p className="text-xs text-[#f5f5f7]/70">
+                                Created on {new Date(chunk.createdAt).toLocaleDateString()}
                               </p>
                             </div>
                             
@@ -485,7 +485,7 @@ export default function KnowledgePage() {
                                 variant="outline"
                                 size="sm"
                                 onClick={() => startEdit(chunk)}
-                                className="border-gray-300 text-gray-700 hover:bg-gray-100"
+                                className="border-[#4a4b4d] text-[#f5f5f7] hover:bg-[#3a3b3d] hover:border-[#5a5b5d]"
                               >
                                 <Edit className="h-4 w-4" />
                               </Button>
@@ -493,7 +493,7 @@ export default function KnowledgePage() {
                                 variant="outline"
                                 size="sm"
                                 onClick={() => deleteChunk(chunk.id, chunk.title)}
-                                className="border-red-300 text-red-600 hover:bg-red-500 hover:text-white"
+                                className="border-red-800/40 text-red-400 hover:bg-red-900/30 hover:text-red-300 hover:border-red-700/50"
                               >
                                 <Trash2 className="h-4 w-4" />
                               </Button>
@@ -517,28 +517,28 @@ export default function KnowledgePage() {
             resetForm();
           }
         }}>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-white border border-gray-300 shadow-2xl">
-            <DialogHeader className="bg-gradient-to-r from-gray-900 to-gray-800 text-white p-6 -m-6 mb-6 rounded-t-lg">
-              <DialogTitle className="flex items-center gap-2 text-white">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-[#1c1d20] border border-[#3a3b3d] shadow-xl">
+            <DialogHeader className="bg-[#2a2b2d] text-[#f5f5f7] p-6 -m-6 mb-6 rounded-t-md">
+              <DialogTitle className="flex items-center gap-2 text-[#f5f5f7]">
                 <Brain className="h-5 w-5" />
-                {editingChunk ? 'Editar Conhecimento' : 'Adicionar Conhecimento'}
+                {editingChunk ? 'Edit Knowledge' : 'Add Knowledge'}
               </DialogTitle>
-              <DialogDescription className="text-gray-200">
-                {editingChunk ? 'Modifique as informações do conhecimento' : 'Adicione novo conhecimento à base do agente'}
+              <DialogDescription className="text-[#f5f5f7]/70">
+                {editingChunk ? 'Modify knowledge information' : 'Add new knowledge to the agent database'}
               </DialogDescription>
             </DialogHeader>
 
             <div className="space-y-6 px-1">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-gray-900 font-medium">Tipo de Conhecimento</Label>
+                  <Label className="text-[#f5f5f7] font-medium">Knowledge Type</Label>
                   <Select value={formData.type} onValueChange={(value) => setFormData(prev => ({ ...prev, type: value as KnowledgeType }))}>
-                    <SelectTrigger className="bg-white border-gray-300 text-gray-900">
+                    <SelectTrigger className="bg-[#3a3b3d] border-[#4a4b4d]/30 text-[#f5f5f7]">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-white border border-gray-300 text-gray-900">
+                    <SelectContent className="bg-[#2a2b2d] border-[#3a3b3d] text-[#f5f5f7]">
                       {Object.entries(typeConfig).map(([type, config]) => (
-                        <SelectItem key={type} value={type} className="text-gray-900 hover:bg-gray-100">
+                        <SelectItem key={type} value={type} className="text-[#f5f5f7] hover:bg-[#3a3b3d]">
                           {config.emoji} {config.label}
                         </SelectItem>
                       ))}
@@ -547,17 +547,17 @@ export default function KnowledgePage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="text-gray-900 font-medium">Prioridade (1-5)</Label>
+                  <Label className="text-[#f5f5f7] font-medium">Priority (1-5)</Label>
                   <Select value={formData.priority.toString()} onValueChange={(value) => setFormData(prev => ({ ...prev, priority: parseInt(value) }))}>
-                    <SelectTrigger className="bg-white border-gray-300 text-gray-900">
+                    <SelectTrigger className="bg-[#3a3b3d] border-[#4a4b4d]/30 text-[#f5f5f7]">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-white border border-gray-300 text-gray-900">
-                      <SelectItem value="1" className="text-gray-900 hover:bg-gray-100">⭐ 1 - Baixa</SelectItem>
-                      <SelectItem value="2" className="text-gray-900 hover:bg-gray-100">⭐⭐ 2 - Baixa-Média</SelectItem>
-                      <SelectItem value="3" className="text-gray-900 hover:bg-gray-100">⭐⭐⭐ 3 - Média</SelectItem>
-                      <SelectItem value="4" className="text-gray-900 hover:bg-gray-100">⭐⭐⭐⭐ 4 - Alta</SelectItem>
-                      <SelectItem value="5" className="text-gray-900 hover:bg-gray-100">⭐⭐⭐⭐⭐ 5 - Crítica</SelectItem>
+                    <SelectContent className="bg-[#2a2b2d] border-[#3a3b3d] text-[#f5f5f7]">
+                      <SelectItem value="1" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">⭐ 1 - Low</SelectItem>
+                      <SelectItem value="2" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">⭐⭐ 2 - Low-Medium</SelectItem>
+                      <SelectItem value="3" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">⭐⭐⭐ 3 - Medium</SelectItem>
+                      <SelectItem value="4" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">⭐⭐⭐⭐ 4 - High</SelectItem>
+                      <SelectItem value="5" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">⭐⭐⭐⭐⭐ 5 - Critical</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

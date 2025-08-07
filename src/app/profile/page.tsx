@@ -42,8 +42,8 @@ export default function ProfilePage() {
   if (!profile) {
     return (
       <AppLayout>
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        <div className="flex items-center justify-center h-64 bg-[#1c1d20]">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#f5f5f7]"></div>
         </div>
       </AppLayout>
     );
@@ -51,70 +51,71 @@ export default function ProfilePage() {
 
   return (
     <AppLayout>
-      <div className="space-y-6">
+      <div className="space-y-6 bg-[#1c1d20]">
         {/* Header */}
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Perfil</h1>
-          <p className="text-gray-600">Gerencie suas informações pessoais</p>
+          <h1 className="text-2xl font-bold text-[#f5f5f7] tracking-tight">Profile</h1>
+          <p className="text-[#f5f5f7]/70">Manage your personal information</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Informações Pessoais */}
           <div className="lg:col-span-2">
-            <Card className="bg-white border-gray-200 shadow-sm">
+            <Card className="bg-[#2a2b2d] border-[#3a3b3d]/30 shadow-sm">
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
-                    <CardTitle className="text-lg font-semibold text-gray-900">
-                      Informações Pessoais
+                    <CardTitle className="text-lg font-semibold text-[#f5f5f7]">
+                      Personal Information
                     </CardTitle>
-                    <CardDescription>
-                      Atualize seus dados pessoais
+                    <CardDescription className="text-[#f5f5f7]/70">
+                      Update your personal data
                     </CardDescription>
                   </div>
                   <Button
                     variant="outline"
                     size="sm"
                     onClick={() => setIsEditing(!isEditing)}
+                    className="border-[#4a4b4d] text-[#f5f5f7] hover:bg-[#3a3b3d] hover:border-[#5a5b5d]"
                   >
-                    {isEditing ? 'Cancelar' : 'Editar'}
+                    {isEditing ? 'Cancel' : 'Edit'}
                   </Button>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="name">Nome</Label>
+                    <Label htmlFor="name" className="text-[#f5f5f7]">Name</Label>
                     <Input
                       id="name"
                       value={profile.name}
                       disabled={!isEditing}
-                      className="mt-1"
+                      className="mt-1 bg-[#3a3b3d] border-[#4a4b4d]/30 text-[#f5f5f7] placeholder:text-[#f5f5f7]/50"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email" className="text-[#f5f5f7]">Email</Label>
                     <Input
                       id="email"
                       type="email"
                       value={profile.email}
                       disabled={!isEditing}
-                      className="mt-1"
+                      className="mt-1 bg-[#3a3b3d] border-[#4a4b4d]/30 text-[#f5f5f7] placeholder:text-[#f5f5f7]/50"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="phone">Telefone</Label>
+                    <Label htmlFor="phone" className="text-[#f5f5f7]">Phone</Label>
                     <Input
                       id="phone"
                       value={profile.phone || ''}
                       disabled={!isEditing}
-                      className="mt-1"
+                      className="mt-1 bg-[#3a3b3d] border-[#4a4b4d]/30 text-[#f5f5f7] placeholder:text-[#f5f5f7]/50"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="plan">Plano</Label>
+                    <Label htmlFor="plan" className="text-[#f5f5f7]">Plan</Label>
                     <div className="mt-1">
-                      <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
+                      <Badge variant="outline" className="bg-[#3a3b3d]/50 text-[#f5f5f7] border-[#4a4b4d]/30">
                         {profile.plan}
                       </Badge>
                     </div>
@@ -123,9 +124,9 @@ export default function ProfilePage() {
                 
                 {isEditing && (
                   <div className="flex gap-2 pt-4">
-                    <Button size="sm">Salvar</Button>
-                    <Button variant="outline" size="sm" onClick={() => setIsEditing(false)}>
-                      Cancelar
+                    <Button size="sm" className="bg-[#3a3b3d] hover:bg-[#4a4b4d] text-[#f5f5f7]">Save</Button>
+                    <Button variant="outline" size="sm" onClick={() => setIsEditing(false)} className="border-[#4a4b4d] text-[#f5f5f7] hover:bg-[#3a3b3d] hover:border-[#5a5b5d]">
+                      Cancel
                     </Button>
                   </div>
                 )}
@@ -135,60 +136,60 @@ export default function ProfilePage() {
 
           {/* Estatísticas */}
           <div className="space-y-6">
-            <Card className="bg-white border-gray-200 shadow-sm">
+            <Card className="bg-[#2a2b2d] border-[#3a3b3d]/30 shadow-sm">
               <CardHeader>
-                <CardTitle className="text-lg font-semibold text-gray-900">
-                  Uso de Tokens
+                <CardTitle className="text-lg font-semibold text-[#f5f5f7]">
+                  Token Usage
                 </CardTitle>
-                <CardDescription>
-                  Consumo mensal de IA
+                <CardDescription className="text-[#f5f5f7]/70">
+                  Monthly AI consumption
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Usado</span>
-                    <span className="font-medium">{profile.tokensUsed.toLocaleString()}</span>
+                    <span className="text-[#f5f5f7]/70">Used</span>
+                    <span className="font-medium text-[#f5f5f7]">{profile.tokensUsed.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Limite</span>
-                    <span className="font-medium">{profile.tokensLimit.toLocaleString()}</span>
+                    <span className="text-[#f5f5f7]/70">Limit</span>
+                    <span className="font-medium text-[#f5f5f7]">{profile.tokensLimit.toLocaleString()}</span>
                   </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="w-full bg-[#3a3b3d] rounded-full h-2">
                     <div 
-                      className="bg-blue-600 h-2 rounded-full" 
+                      className="bg-[#4a6bbd] h-2 rounded-full" 
                       style={{ width: `${(profile.tokensUsed / profile.tokensLimit) * 100}%` }}
                     ></div>
                   </div>
-                  <p className="text-xs text-gray-500">
-                    {Math.round((profile.tokensUsed / profile.tokensLimit) * 100)}% utilizado
+                  <p className="text-xs text-[#f5f5f7]/70">
+                    {Math.round((profile.tokensUsed / profile.tokensLimit) * 100)}% used
                   </p>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="bg-white border-gray-200 shadow-sm">
+            <Card className="bg-[#2a2b2d] border-[#3a3b3d]/30 shadow-sm">
               <CardHeader>
-                <CardTitle className="text-lg font-semibold text-gray-900">
-                  Estatísticas
+                <CardTitle className="text-lg font-semibold text-[#f5f5f7]">
+                  Statistics
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Instâncias Ativas</span>
-                  <Badge variant="outline" className="bg-green-50 text-green-600 border-green-200">
+                  <span className="text-[#f5f5f7]/70">Active Instances</span>
+                  <Badge variant="outline" className="bg-[#3a3b3d]/50 text-[#6de67d] border-[#4a4b4d]/30">
                     3
                   </Badge>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Agentes IA</span>
-                  <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
+                  <span className="text-[#f5f5f7]/70">AI Agents</span>
+                  <Badge variant="outline" className="bg-[#3a3b3d]/50 text-[#6d9ee6] border-[#4a4b4d]/30">
                     5
                   </Badge>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-gray-600">Mensagens Hoje</span>
-                  <Badge variant="outline" className="bg-purple-50 text-purple-600 border-purple-200">
+                  <span className="text-[#f5f5f7]/70">Messages Today</span>
+                  <Badge variant="outline" className="bg-[#3a3b3d]/50 text-[#c76de6] border-[#4a4b4d]/30">
                     127
                   </Badge>
                 </div>

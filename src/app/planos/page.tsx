@@ -8,43 +8,43 @@ import { Check } from 'lucide-react';
 
 const plans = [
   {
-    name: "Plano Básico",
-    price: "R$ 29",
-    period: "mês",
+    name: "Basic Plan",
+    price: "$29",
+    period: "month",
     popular: false,
     features: [
-      "Até 3 instâncias WhatsApp",
-      "1 agente IA por instância",
-      "Suporte por email",
-      "Dashboard básico",
+      "Up to 3 WhatsApp instances",
+      "1 AI agent per instance",
+      "Email support",
+      "Basic dashboard",
     ],
   },
   {
-    name: "Plano Pro",
-    price: "R$ 79",
-    period: "mês",
+    name: "Pro Plan",
+    price: "$79",
+    period: "month",
     popular: true,
     features: [
-      "Até 10 instâncias WhatsApp",
-      "Agentes IA ilimitados",
-      "Base de conhecimento avançada",
-      "Suporte prioritário",
-      "Analytics avançados",
-      "Webhooks personalizados",
+      "Up to 10 WhatsApp instances",
+      "Unlimited AI agents",
+      "Advanced knowledge base",
+      "Priority support",
+      "Advanced analytics",
+      "Custom webhooks",
     ],
   },
   {
-    name: "Plano Enterprise",
-    price: "R$ 199",
-    period: "mês",
+    name: "Enterprise Plan",
+    price: "$199",
+    period: "month",
     popular: false,
     features: [
-      "Instâncias ilimitadas",
-      "Agentes IA ilimitados",
-      "API completa",
-      "Suporte 24/7",
-      "Customizações",
-      "Onboarding dedicado",
+      "Unlimited instances",
+      "Unlimited AI agents",
+      "Full API access",
+      "24/7 support",
+      "Customizations",
+      "Dedicated onboarding",
     ],
   },
 ];
@@ -52,50 +52,50 @@ const plans = [
 export default function PlanosPage() {
   return (
     <AppLayout>
-      <div className="min-h-[100dvh] bg-gray-100 pt-4 pb-8 px-2">
+      <div className="min-h-[100dvh] bg-[#1c1d20] pt-4 pb-8 px-2">
         <div className="container mx-auto pl-1 sm:pl-2 md:pl-4 lg:pl-8 max-w-[99%] sm:max-w-[97%] md:max-w-[95%] lg:max-w-[92%]">
-          {/* Título */}
+          {/* Title */}
           <div className="mb-6">
-            <h1 className="text-lg sm:text-base md:text-lg font-bold text-gray-900 tracking-[-0.03em] font-inter">
-              Planos e Preços
+            <h1 className="text-lg sm:text-base md:text-lg font-bold text-[#f5f5f7] tracking-[-0.03em] font-inter">
+              Plans & Pricing
             </h1>
-            <p className="text-xs sm:text-xs md:text-xs text-gray-600 tracking-[-0.03em] font-inter">
-              Escolha o plano ideal para suas necessidades
+            <p className="text-xs sm:text-xs md:text-xs text-[#f5f5f7]/70 tracking-[-0.03em] font-inter">
+              Choose the ideal plan for your needs
             </p>
           </div>
 
-          {/* Cards dos Planos */}
+          {/* Plan Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {plans.map((plan, index) => (
               <Card 
                 key={index} 
-                className={`bg-gray-800/5 border-0 shadow-[0_8px_30px_rgba(0,0,0,0.12)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.16)] transition-all duration-300 rounded-2xl relative ${
-                  plan.popular ? 'ring-2 ring-blue-500' : ''
+                className={`bg-[#2a2b2d] border-[#3a3b3d]/30 hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] transition-all duration-300 rounded-2xl relative ${
+                  plan.popular ? 'ring-2 ring-[#4a6bbd]' : ''
                 }`}
               >
                 {plan.popular && (
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                    <Badge className="bg-blue-500 text-white px-3 py-1 text-xs">
-                      Mais Popular
+                    <Badge className="bg-[#4a6bbd] text-[#f5f5f7] px-3 py-1 text-xs">
+                      Most Popular
                     </Badge>
                   </div>
                 )}
                 
                 <CardHeader className="text-center pb-4">
-                  <CardTitle className="text-gray-900 tracking-[-0.03em] font-inter text-lg">
+                  <CardTitle className="text-[#f5f5f7] tracking-[-0.03em] font-inter text-lg">
                     {plan.name}
                   </CardTitle>
                   <div className="mt-2">
-                    <span className="text-3xl font-bold text-gray-900">{plan.price}</span>
-                    <span className="text-gray-600 text-sm">/{plan.period}</span>
+                    <span className="text-3xl font-bold text-[#f5f5f7]">{plan.price}</span>
+                    <span className="text-[#f5f5f7]/70 text-sm">/{plan.period}</span>
                   </div>
                 </CardHeader>
                 
                 <CardContent className="space-y-4">
                   <ul className="space-y-2">
                     {plan.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-center gap-2 text-sm text-gray-700">
-                        <Check className="h-4 w-4 text-green-500 flex-shrink-0" />
+                      <li key={featureIndex} className="flex items-center gap-2 text-sm text-[#f5f5f7]/90">
+                        <Check className="h-4 w-4 text-[#6de67d] flex-shrink-0" />
                         <span>{feature}</span>
                       </li>
                     ))}
@@ -104,36 +104,36 @@ export default function PlanosPage() {
                   <Button 
                     className={`w-full h-10 rounded-xl text-sm font-medium transition-all duration-300 ${
                       plan.popular 
-                        ? 'bg-blue-500 hover:bg-blue-600 text-white shadow-lg' 
-                        : 'bg-gray-800/5 border-0 shadow-[0_4px_12px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.1)] text-gray-700 hover:bg-gray-800/10'
+                        ? 'bg-[#4a6bbd] hover:bg-[#5a7bcd] text-[#f5f5f7] shadow-lg' 
+                        : 'bg-[#3a3b3d] border-[#4a4b4d]/30 hover:bg-[#4a4b4d] text-[#f5f5f7]'
                     }`}
                   >
-                    Escolher Plano
+                    Choose Plan
                   </Button>
                 </CardContent>
               </Card>
             ))}
           </div>
 
-          {/* Informações Adicionais */}
+          {/* Additional Information */}
           <div className="mt-8 text-center">
-            <Card className="bg-gray-800/5 border-0 shadow-[0_8px_30px_rgba(0,0,0,0.12)] rounded-2xl">
+            <Card className="bg-[#2a2b2d] border-[#3a3b3d]/30 rounded-2xl">
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2 tracking-[-0.03em] font-inter">
-                  Todos os planos incluem:
+                <h3 className="text-lg font-semibold text-[#f5f5f7] mb-2 tracking-[-0.03em] font-inter">
+                  All plans include:
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-[#f5f5f7]/90">
                   <div className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Garantia de 7 dias</span>
+                    <Check className="h-4 w-4 text-[#6de67d]" />
+                    <span>7-day guarantee</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Atualizações gratuitas</span>
+                    <Check className="h-4 w-4 text-[#6de67d]" />
+                    <span>Free updates</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Check className="h-4 w-4 text-green-500" />
-                    <span>Documentação completa</span>
+                    <Check className="h-4 w-4 text-[#6de67d]" />
+                    <span>Complete documentation</span>
                   </div>
                 </div>
               </CardContent>
