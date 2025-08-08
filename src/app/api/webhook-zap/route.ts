@@ -72,9 +72,9 @@ export async function POST(req: Request) {
               priceId: priceId,
               status: subscription.status,
               stripeId: subscription.id,
-              currentPeriodStart: new Date(subscription.current_period_start * 1000),
-              currentPeriodEnd: new Date(subscription.current_period_end * 1000),
-              cancelAtPeriodEnd: subscription.cancel_at_period_end,
+              currentPeriodStart: new Date((subscription as any).current_period_start * 1000),
+              currentPeriodEnd: new Date((subscription as any).current_period_end * 1000),
+              cancelAtPeriodEnd: (subscription as any).cancel_at_period_end,
             },
           });
 

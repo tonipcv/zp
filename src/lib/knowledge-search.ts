@@ -227,7 +227,7 @@ export class KnowledgeSearch {
 
     return {
       totalChunks,
-      byType: byType.reduce((acc, item) => {
+      byType: byType.reduce((acc: Record<KnowledgeType, number>, item: { type: KnowledgeType, _count: { type: number } }) => {
         acc[item.type] = item._count.type;
         return acc;
       }, {} as Record<KnowledgeType, number>)

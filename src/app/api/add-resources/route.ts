@@ -39,7 +39,7 @@ export async function POST(request: Request) {
 
     // Verificar se o usuário tem uma assinatura ativa
     const hasActiveSubscription = user.subscriptions.some(
-      (sub) => sub.status === 'active'
+      (sub: { status: string }) => sub.status === 'active'
     );
 
     if (!hasActiveSubscription) {
