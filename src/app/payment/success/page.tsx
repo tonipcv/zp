@@ -14,7 +14,7 @@ function PaymentSuccessContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const whatsappNumber = "5511975873111";
-  const whatsappMessage = "Olá! Acabei de assinar o programa e gostaria de mais informações.";
+  const whatsappMessage = "Olá! Acabei de assinar o plano ZAP e gostaria de mais informações sobre como configurar minha instância e agente.";
 
   const handleWhatsAppClick = () => {
     const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
@@ -38,7 +38,7 @@ function PaymentSuccessContent() {
 
         // Track purchase event with Facebook Pixel
         fbEvent('Purchase', {
-          currency: 'BRL',
+          currency: 'USD',
           value: data.amount_total / 100, // Convert from cents to real value
         });
 
@@ -96,8 +96,11 @@ function PaymentSuccessContent() {
           <h1 className="text-2xl font-bold text-gray-800 mb-4">
             Pagamento confirmado
           </h1>
+          <p className="text-gray-600 mb-4">
+            Obrigado por assinar o plano ZAP! Você será redirecionado para o dashboard em alguns segundos.
+          </p>
           <p className="text-gray-600 mb-8">
-            Obrigado por assinar! Você será redirecionado para o dashboard em alguns segundos...
+            Seu plano inclui 1 instância WhatsApp + 1 agente de IA com 100.000 tokens inclusos.
           </p>
           
           <button

@@ -3,6 +3,7 @@
 import { AppLayout } from '@/components/AppSidebar';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { DashboardSubscription } from '@/components/DashboardSubscription';
 
 export default function DashboardPage() {
   return (

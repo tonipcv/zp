@@ -72,6 +72,26 @@ datasource db {
      @@unique([identifier, token])
    }
 
+   model VerificationCode {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  code      String
+  verified  Boolean  @default(false)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model LoginVerificationCode {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  code      String
+  verified  Boolean  @default(false)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
    model Plan {
   id          String   @id @default(cuid())
      name        String

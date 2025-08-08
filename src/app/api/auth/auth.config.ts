@@ -9,10 +9,11 @@ export const authOptions: NextAuthOptions = {
       name: 'credentials',
       credentials: {
         email: { label: 'Email', type: 'text' },
-        password: { label: 'Password', type: 'password' }
+        password: { label: 'Password', type: 'password' },
+        verificationCode: { label: 'Verification Code', type: 'text' }
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
+        if (!credentials?.email || !credentials?.password || !credentials?.verificationCode) {
           throw new Error('Credenciais inválidas')
         }
 
@@ -25,6 +26,27 @@ export const authOptions: NextAuthOptions = {
         if (!user || !user.password) {
           throw new Error('Usuário não encontrado')
         }
+
+        // Verificar o código de verificação
+        const verificationRecord = await prisma.loginVerificationCode.findFirst({
+          where: {
+            email: credentials.email,
+            code: credentials.verificationCode,
+            expiresAt: {
+              gt: new Date() // Código não expirado
+            }
+          }
+        })
+
+        if (!verificationRecord) {
+          throw new Error('Código de verificação inválido ou expirado')
+        }
+        
+        // Marcar o código como verificado
+        await prisma.loginVerificationCode.update({
+          where: { id: verificationRecord.id },
+          data: { verified: true }
+        })
 
         const isCorrectPassword = await compare(
           credentials.password,
