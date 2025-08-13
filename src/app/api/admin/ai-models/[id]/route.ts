@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+// route handlers use Web Fetch API types (Request/Response)
 import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
@@ -14,21 +14,22 @@ async function isAdmin(email: string | null | undefined): Promise<boolean> {
 
 // GET - Obter um modelo de IA específico
 export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  request: Request
 ) {
   try {
     // Verificar se o usuário está autenticado e é admin
     const session = await getServerSession(authOptions);
     
     if (!session?.user?.email || !await isAdmin(session.user.email)) {
-      return NextResponse.json(
+      return Response.json(
         { error: 'Não autorizado. Acesso restrito a administradores.' },
         { status: 403 }
       );
     }
 
-    const id = params.id;
+    const pathname = new URL(request.url).pathname;
+    const parts = pathname.split('/').filter(Boolean);
+    const id = decodeURIComponent(parts[parts.length - 1] || '');
 
     // Buscar o modelo pelo ID
     const aiModel = await prisma.aIModel.findUnique({
@@ -36,16 +37,16 @@ export async function GET(
     });
 
     if (!aiModel) {
-      return NextResponse.json(
+      return Response.json(
         { error: 'Modelo não encontrado' },
         { status: 404 }
       );
     }
 
-    return NextResponse.json({ model: aiModel });
+    return Response.json({ model: aiModel });
   } catch (error) {
     console.error('Erro ao buscar modelo de IA:', error);
-    return NextResponse.json(
+    return Response.json(
       { error: 'Erro ao processar solicitação' },
       { status: 500 }
     );
@@ -54,21 +55,22 @@ export async function GET(
 
 // PUT - Atualizar um modelo de IA
 export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  request: Request
 ) {
   try {
     // Verificar se o usuário está autenticado e é admin
     const session = await getServerSession(authOptions);
     
     if (!session?.user?.email || !await isAdmin(session.user.email)) {
-      return NextResponse.json(
+      return Response.json(
         { error: 'Não autorizado. Acesso restrito a administradores.' },
         { status: 403 }
       );
     }
 
-    const id = params.id;
+    const pathname = new URL(request.url).pathname;
+    const parts = pathname.split('/').filter(Boolean);
+    const id = decodeURIComponent(parts[parts.length - 1] || '');
     const data = await request.json();
 
     // Verificar se o modelo existe
@@ -77,7 +79,7 @@ export async function PUT(
     });
 
     if (!existingModel) {
-      return NextResponse.json(
+      return Response.json(
         { error: 'Modelo não encontrado' },
         { status: 404 }
       );
@@ -96,7 +98,7 @@ export async function PUT(
       });
 
       if (duplicateModel) {
-        return NextResponse.json(
+        return Response.json(
           { error: 'Já existe outro modelo com este nome ou identificador.' },
           { status: 400 }
         );
@@ -129,13 +131,13 @@ export async function PUT(
       });
     }
 
-    return NextResponse.json({
+    return Response.json({
       message: 'Modelo atualizado com sucesso',
       model: updatedModel
     });
   } catch (error) {
     console.error('Erro ao atualizar modelo de IA:', error);
-    return NextResponse.json(
+    return Response.json(
       { error: 'Erro ao processar solicitação' },
       { status: 500 }
     );
@@ -144,21 +146,22 @@ export async function PUT(
 
 // DELETE - Excluir um modelo de IA
 export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  request: Request
 ) {
   try {
     // Verificar se o usuário está autenticado e é admin
     const session = await getServerSession(authOptions);
     
     if (!session?.user?.email || !await isAdmin(session.user.email)) {
-      return NextResponse.json(
+      return Response.json(
         { error: 'Não autorizado. Acesso restrito a administradores.' },
         { status: 403 }
       );
     }
 
-    const id = params.id;
+    const pathname = new URL(request.url).pathname;
+    const parts = pathname.split('/').filter(Boolean);
+    const id = decodeURIComponent(parts[parts.length - 1] || '');
 
     // Verificar se o modelo existe
     const existingModel = await prisma.aIModel.findUnique({
@@ -166,7 +169,7 @@ export async function DELETE(
     });
 
     if (!existingModel) {
-      return NextResponse.json(
+      return Response.json(
         { error: 'Modelo não encontrado' },
         { status: 404 }
       );
@@ -174,7 +177,7 @@ export async function DELETE(
 
     // Verificar se é o modelo padrão
     if (existingModel.isDefault) {
-      return NextResponse.json(
+      return Response.json(
         { error: 'Não é possível excluir o modelo padrão. Defina outro modelo como padrão primeiro.' },
         { status: 400 }
       );
@@ -185,12 +188,12 @@ export async function DELETE(
       where: { id }
     });
 
-    return NextResponse.json({
+    return Response.json({
       message: 'Modelo excluído com sucesso'
     });
   } catch (error) {
     console.error('Erro ao excluir modelo de IA:', error);
-    return NextResponse.json(
+    return Response.json(
       { error: 'Erro ao processar solicitação' },
       { status: 500 }
     );

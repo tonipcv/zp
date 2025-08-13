@@ -17,11 +17,14 @@ export async function GET() {
   try {
     const session = await getServerSession(authOptions);
     
+    // Determinar se o usuário atual é admin
+    const isAdminUser = session?.user?.email ? await isAdmin(session.user.email) : false;
+
     // Filtrar campos diferentes dependendo se é admin ou não
     const models = await prisma.aIModel.findMany({
       where: {
         // Se não for admin, mostrar apenas modelos habilitados
-        ...(session?.user?.email && !isAdmin(session.user.email) ? { enabled: true } : {})
+        ...(!isAdminUser ? { enabled: true } : {})
       },
       select: {
         id: true,
@@ -32,7 +35,7 @@ export async function GET() {
         creditCost: true,
         enabled: true,
         // Estatísticas de uso apenas para admins
-        ...(session?.user?.email && isAdmin(session.user.email) ? {
+        ...(isAdminUser ? {
           _count: {
             select: {
               usages: true
@@ -60,7 +63,7 @@ export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions);
     
-    if (!session?.user?.email || !isAdmin(session.user.email)) {
+    if (!session?.user?.email || !(await isAdmin(session.user.email))) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
@@ -116,7 +119,7 @@ export async function PATCH(req: Request) {
   try {
     const session = await getServerSession(authOptions);
     
-    if (!session?.user?.email || !isAdmin(session.user.email)) {
+    if (!session?.user?.email || !(await isAdmin(session.user.email))) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
@@ -172,7 +175,7 @@ export async function DELETE(req: Request) {
   try {
     const session = await getServerSession(authOptions);
     
-    if (!session?.user?.email || !isAdmin(session.user.email)) {
+    if (!session?.user?.email || !(await isAdmin(session.user.email))) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }

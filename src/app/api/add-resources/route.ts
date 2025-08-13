@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import type { Subscription } from '@prisma/client';
 import { stripe } from '@/lib/stripe';
 import { prisma } from '@/lib/prisma';
 import { ZAP_PRICE_IDS } from '@/lib/stripe-zap-prices';
@@ -39,7 +40,7 @@ export async function POST(request: Request) {
 
     // Verificar se o usuário tem uma assinatura ativa
     const hasActiveSubscription = user.subscriptions.some(
-      (sub) => sub.status === 'active'
+      (sub: Subscription) => sub.status === 'active'
     );
 
     if (!hasActiveSubscription) {

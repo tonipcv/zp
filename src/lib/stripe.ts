@@ -16,6 +16,6 @@ export const getStripe = () => {
 
 // Server-side Stripe instance
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-  apiVersion: '2023-10-16', // Current stable version
+  // Use SDK's pinned API version; avoid hardcoding to prevent type mismatches
   typescript: true,
-}); 
+});
