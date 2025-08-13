@@ -40,6 +40,8 @@ export function WhatsAppInstances() {
   const [webhookStatus, setWebhookStatus] = useState<{[key: string]: any}>({});
   const [planType, setPlanType] = useState<'free' | 'trial' | 'premium' | 'enterprise' | 'unlimited' | string>('free');
   const [instanceLimit, setInstanceLimit] = useState<number>(1);
+  const [userName, setUserName] = useState<string>('');
+  const [trialDaysLeft, setTrialDaysLeft] = useState<number | null>(null);
 
   // URL correta do webhook
   const CORRECT_WEBHOOK_URL = 'https://zp-bay.vercel.app/api/ai-agent/webhook';
@@ -56,13 +58,26 @@ export function WhatsAppInstances() {
         const data = await res.json();
         const limit = data?.instances?.limit ?? 1;
         const type = data?.plan?.type ?? 'free';
+        const name = data?.user?.name ?? '';
+        const trialEnd = data?.trialEndDate ?? data?.plan?.trialEndDate ?? null;
         setInstanceLimit(typeof limit === 'number' ? limit : 1);
         setPlanType(type);
+        if (typeof name === 'string') setUserName(name);
+        if (trialEnd) {
+          const end = new Date(trialEnd);
+          const now = new Date();
+          const diff = Math.ceil((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+          setTrialDaysLeft(diff > 0 ? diff : 0);
+        } else {
+          // Fallback if API doesn't return trial end
+          setTrialDaysLeft(7);
+        }
       }
     } catch (e) {
       console.warn('Não foi possível carregar limites do perfil, usando padrão 1:', e);
       setInstanceLimit(1);
       setPlanType('free');
+      setTrialDaysLeft(7);
     }
   };
 
@@ -338,6 +353,15 @@ export function WhatsAppInstances() {
 
   return (
     <div>
+      {/* Trial Banner */}
+      {planType === 'trial' && (
+        <div className="mb-3 rounded-md border border-white/10 bg-[#2a2b2d]/60 px-3 py-2 text-xs text-[#f5f5f7] tracking-[-0.02em]">
+          <span className="opacity-90">
+            {`Hello${userName ? ` ${userName}` : ''}, you’re on the Free Trial. You can use 1 agent, 1 WhatsApp connection, and 200 credits`}
+            {typeof trialDaysLeft === 'number' ? ` within ${trialDaysLeft} day${trialDaysLeft === 1 ? '' : 's'}.` : '.'}
+          </span>
+        </div>
+      )}
       {/* Action Button */}
       <div className="flex justify-end">
         <div className="flex gap-2">
@@ -345,7 +369,7 @@ export function WhatsAppInstances() {
             onClick={() => {
               const canCreate = instances.length < instanceLimit;
               if (!canCreate) {
-                toast.info('Limite atingido no seu plano: não é possível criar mais instâncias.');
+                toast.info('Plan limit reached: you cannot create more instances.');
                 return;
               }
               setCreateDialogOpen(true);
@@ -365,16 +389,16 @@ export function WhatsAppInstances() {
           <CardContent className="p-4 text-center">
             <Smartphone className="h-6 w-6 text-[#f5f5f7]/60 mx-auto mb-2" />
             <h3 className="text-sm font-medium text-[#f5f5f7] mb-2 tracking-[-0.03em]">
-              Nenhuma instância criada
+              No instances yet
             </h3>
             <p className="text-[#f5f5f7]/60 mb-3 text-xs tracking-[-0.03em]">
-              Crie sua primeira instância do WhatsApp Business para começar a gerenciar suas conversas
+              Create your first WhatsApp Business instance to start managing your conversations
             </p>
             <Button 
               onClick={() => {
                 const canCreate = instances.length < instanceLimit;
                 if (!canCreate) {
-                  toast.info('Limite atingido no seu plano: não é possível criar mais instâncias.');
+                  toast.info('Plan limit reached: you cannot create more instances.');
                   return;
                 }
                 setCreateDialogOpen(true);
@@ -383,7 +407,7 @@ export function WhatsAppInstances() {
               disabled={instances.length >= instanceLimit}
             >
               <Plus className="h-3 w-3 mr-1.5" />
-              Criar Primeira Instância
+              Create First Instance
             </Button>
           </CardContent>
         </Card>

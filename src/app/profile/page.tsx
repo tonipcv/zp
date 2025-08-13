@@ -125,8 +125,14 @@ export default function ProfilePage() {
   if (!profile) {
     return (
       <AppLayout>
-        <div className="flex items-center justify-center h-64 bg-[#1c1d20]">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#f5f5f7]"></div>
+        <div className="w-full">
+          <div className="max-w-7xl mx-auto px-4 py-4">
+            {/* Header - minimal like WhatsApp */}
+            <div className="mb-4">
+              <h1 className="text-sm font-medium text-[#f5f5f7] tracking-[-0.03em]">Profile</h1>
+              <p className="text-xs text-[#f5f5f7]/60 tracking-[-0.03em]">Manage your personal information</p>
+            </div>
+          </div>
         </div>
       </AppLayout>
     );

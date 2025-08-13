@@ -42,9 +42,9 @@ export async function POST(req: NextRequest) {
       }, { status: 400 });
     }
     
-    // Set trial period (14 days)
+    // Set trial period (3 days)
     const trialStartDate = new Date();
-    const trialEndDate = addDays(trialStartDate, 14);
+    const trialEndDate = addDays(trialStartDate, 3);
     
     // Update user with 200 initial credits and activate trial
     console.log('Activate Trial - Activating trial with 200 credits');

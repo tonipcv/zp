@@ -188,7 +188,8 @@ export default function AIAgentPage() {
         setAgents(agentsList);
         
         // Verificar status do webhook para cada agente
-        await checkWebhookStatusForAgents(agentsList);
+        // Não bloquear o carregamento inicial aguardando os webhooks
+        checkWebhookStatusForAgents(agentsList);
       }
 
       if (statsRes.ok) {
@@ -204,24 +205,22 @@ export default function AIAgentPage() {
   };
 
   const checkWebhookStatusForAgents = async (agentsList: AIAgentConfig[]) => {
-    const statusMap: Record<string, WebhookReadiness> = {};
-    
-    for (const agent of agentsList) {
-      try {
-        const response = await fetch(`/api/ai-agent/webhook/setup?instanceId=${agent.instanceId}`);
-        if (response.ok) {
-          const data = await response.json();
-          statusMap[agent.id] = data.readiness;
+    const entries = await Promise.all(
+      agentsList.map(async (agent) => {
+        try {
+          const response = await fetch(`/api/ai-agent/webhook/setup?instanceId=${agent.instanceId}`);
+          if (response.ok) {
+            const data = await response.json();
+            return [agent.id, data.readiness] as const;
+          }
+        } catch (error) {
+          console.error(`Erro ao verificar webhook para ${agent.instance.instanceName}:`, error);
         }
-      } catch (error) {
-        console.error(`Erro ao verificar webhook para ${agent.instance.instanceName}:`, error);
-        statusMap[agent.id] = {
-          isReady: false,
-          issues: ['Erro ao verificar status']
-        };
-      }
-    }
-    
+        return [agent.id, { isReady: false, issues: ['Erro ao verificar status'] }] as const;
+      })
+    );
+
+    const statusMap: Record<string, WebhookReadiness> = Object.fromEntries(entries);
     setWebhookStatus(statusMap);
   };
 
@@ -559,9 +558,7 @@ export default function AIAgentPage() {
   if (loading) {
     return (
       <AppLayout>
-        <div className="flex items-center justify-center min-h-[100px]">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#f5f5f7]/60"></div>
-        </div>
+        <div />
       </AppLayout>
     );
   }

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { hash } from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
 import { type Region } from '@/lib/prices';
+import { addDays } from 'date-fns';
 
 export async function POST(req: Request) {
   try {
@@ -50,7 +51,11 @@ export async function POST(req: Request) {
     const hashedPassword = await hash(password, 10);
 
     try {
-      // Create user with verified email
+      // Initialize 14-day trial window and credits on signup
+      const trialStartDate = new Date();
+      const trialEndDate = addDays(trialStartDate, 3);
+
+      // Create user with verified email and active trial
       const user = await prisma.user.create({
         data: {
           name,
@@ -58,6 +63,13 @@ export async function POST(req: Request) {
           password: hashedPassword,
           region: region as Region,
           emailVerified: new Date(), // Email is already verified through the code
+          // Trial initialization
+          credits: 200,
+          maxCredits: 200,
+          trialActivated: true,
+          trialStartDate,
+          trialEndDate,
+          plan: 'trial',
         },
       });
 
@@ -72,6 +84,12 @@ export async function POST(req: Request) {
           name: user.name,
           email: user.email,
           region: user.region,
+          credits: user.credits,
+          maxCredits: user.maxCredits,
+          trialActivated: user.trialActivated,
+          trialStartDate: user.trialStartDate,
+          trialEndDate: user.trialEndDate,
+          plan: user.plan,
         },
       });
     } catch (dbError) {

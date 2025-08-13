@@ -56,11 +56,6 @@ const menuItems = [
         url: "/ai-agent",
         icon: Bot,
       },
-      {
-        title: "Conhecimento",
-        url: "/ai-agent/knowledge",
-        icon: BookOpen,
-      },
     ],
   },
   {
