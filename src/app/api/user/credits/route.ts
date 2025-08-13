@@ -128,11 +128,9 @@ export async function PUT(req: NextRequest) {
     
     const { userId, amount, setMax = false } = await req.json();
     
-    // For now, let's assume only specific emails can refill credits
-    // In the future, you might want to add a proper role field to the User model
-    const adminEmails = ['admin@example.com']; // Replace with actual admin emails
-    
-    if (!adminEmails.includes(session.user.email)) {
+    // Check admin via environment variable
+    const adminEmail = process.env.EMAIL_ADMIN || process.env.NEXT_PUBLIC_EMAIL_ADMIN;
+    if (!adminEmail || session.user.email.toLowerCase() !== adminEmail.toLowerCase()) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
     

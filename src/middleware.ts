@@ -9,7 +9,8 @@ async function hasAccess(token: any) {
   console.log('hasAccess - Checking access for token:', JSON.stringify(token || 'No token'));
   
   // Special case for unlimited user
-  if (token?.email === 'xppsalvador@gmail.com') {
+  const adminEmail = process.env.EMAIL_ADMIN || process.env.NEXT_PUBLIC_EMAIL_ADMIN;
+  if (token?.email && adminEmail && token.email.toLowerCase() === adminEmail.toLowerCase()) {
     console.log('hasAccess - Special unlimited user detected');
     return true;
   }

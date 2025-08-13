@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { signOut } from 'next-auth/react';
@@ -73,6 +73,7 @@ const menuItems = [
 export function AppSidebar() {
   const pathname = usePathname();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -86,6 +87,31 @@ export function AppSidebar() {
       setIsLoggingOut(false);
     }
   };
+
+  // Determine admin by comparing session email with NEXT_PUBLIC_EMAIL_ADMIN
+  useEffect(() => {
+    let mounted = true;
+    const checkAdmin = async () => {
+      try {
+        const res = await fetch('/api/auth/session');
+        if (!res.ok) return;
+        const data = await res.json();
+        const sessionEmail: string | undefined = data?.user?.email;
+        const adminEmail = process.env.NEXT_PUBLIC_EMAIL_ADMIN;
+        if (mounted) {
+          setIsAdmin(
+            !!sessionEmail && !!adminEmail && sessionEmail.toLowerCase() === adminEmail.toLowerCase()
+          );
+        }
+      } catch (e) {
+        // silent fail, no admin
+      }
+    };
+    checkAdmin();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   return (
     <Sidebar
@@ -131,6 +157,36 @@ export function AppSidebar() {
             </SidebarGroupContent>
           </SidebarGroup>
         ))}
+
+        {isAdmin && (
+          <SidebarGroup className="px-2 py-2">
+            <SidebarGroupLabel className="hidden md:block px-2 pb-1 text-[9px] uppercase tracking-wide text-[#6de67d]/70">
+              Admin
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu className="space-y-1">
+                {[{ title: 'Users', url: '/admin/users', icon: Users }, { title: 'AI Models', url: '/admin/models', icon: Settings }].map((item) => {
+                  const active = pathname ? (pathname === item.url || pathname.startsWith(item.url + '/')) : false;
+                  return (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={active}
+                        className="h-7 w-full px-2 gap-2 rounded-md justify-start text-xs transition-colors data-[active=true]:bg-white/10 data-[active=true]:text-white hover:bg-white/5 text-[#f5f5f7]/80"
+                        aria-label={item.title}
+                      >
+                        <Link href={item.url} className="flex items-center gap-2">
+                          <item.icon className="h-4 w-4 stroke-[1.6] flex-shrink-0" />
+                          <span className="hidden md:inline">{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
       </SidebarContent>
 
       <SidebarFooter className="border-t border-white/10 bg-[#1c1d20] p-2">
@@ -184,4 +240,5 @@ export function AppLayout({ children }: AppLayoutProps) {
       </div>
     </SidebarProvider>
   );
-} 
+}
+ 

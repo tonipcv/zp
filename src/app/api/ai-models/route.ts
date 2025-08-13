@@ -3,13 +3,12 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 
-// Lista de e-mails de administradores
-const ADMIN_EMAILS = ['admin@example.com', 'albert@zapmeeting.com'];
-
-// Verificar se o usuário é administrador
+// Verificar se o usuário é administrador via variável de ambiente
 async function isAdmin(email: string | null | undefined) {
   if (!email) return false;
-  return ADMIN_EMAILS.includes(email);
+  const adminEmail = process.env.EMAIL_ADMIN || process.env.NEXT_PUBLIC_EMAIL_ADMIN;
+  if (!adminEmail) return false;
+  return email.toLowerCase() === adminEmail.toLowerCase();
 }
 
 // GET: Listar todos os modelos de IA
@@ -33,15 +32,7 @@ export async function GET() {
         modelId: true,
         description: true,
         creditCost: true,
-        enabled: true,
-        // Estatísticas de uso apenas para admins
-        ...(isAdminUser ? {
-          _count: {
-            select: {
-              usages: true
-            }
-          }
-        } : {})
+        enabled: true
       },
       orderBy: {
         creditCost: 'asc'
@@ -50,7 +41,10 @@ export async function GET() {
     
     return NextResponse.json({ models });
   } catch (error) {
-    console.error('Error fetching AI models:', error);
+    console.error(
+      'Error fetching AI models:',
+      error instanceof Error ? error.message : String(error ?? 'Unknown error')
+    );
     return NextResponse.json(
       { error: 'Erro ao buscar modelos de IA' },
       { status: 500 }
@@ -106,7 +100,10 @@ export async function POST(req: Request) {
     
     return NextResponse.json({ model: newModel }, { status: 201 });
   } catch (error) {
-    console.error('Error creating AI model:', error);
+    console.error(
+      'Error creating AI model:',
+      error instanceof Error ? error.message : String(error ?? 'Unknown error')
+    );
     return NextResponse.json(
       { error: 'Erro ao criar modelo de IA' },
       { status: 500 }
@@ -162,7 +159,10 @@ export async function PATCH(req: Request) {
     
     return NextResponse.json({ model: updatedModel });
   } catch (error) {
-    console.error('Error updating AI model:', error);
+    console.error(
+      'Error updating AI model:',
+      error instanceof Error ? error.message : String(error ?? 'Unknown error')
+    );
     return NextResponse.json(
       { error: 'Erro ao atualizar modelo de IA' },
       { status: 500 }
@@ -232,7 +232,10 @@ export async function DELETE(req: Request) {
       deleted: true
     });
   } catch (error) {
-    console.error('Error deleting AI model:', error);
+    console.error(
+      'Error deleting AI model:',
+      error instanceof Error ? error.message : String(error ?? 'Unknown error')
+    );
     return NextResponse.json(
       { error: 'Erro ao remover modelo de IA' },
       { status: 500 }

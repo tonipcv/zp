@@ -3,13 +3,12 @@ import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 
-// Lista de emails de administradores
-const ADMIN_EMAILS = ['admin@example.com', 'admin@zap.com'];
-
-// Verificar se o usuário é administrador
+// Verificar se o usuário é administrador via variável de ambiente
 async function isAdmin(email: string | null | undefined): Promise<boolean> {
   if (!email) return false;
-  return ADMIN_EMAILS.includes(email);
+  const adminEmail = process.env.EMAIL_ADMIN || process.env.NEXT_PUBLIC_EMAIL_ADMIN;
+  if (!adminEmail) return false;
+  return email.toLowerCase() === adminEmail.toLowerCase();
 }
 
 // GET - Listar todos os modelos de IA
