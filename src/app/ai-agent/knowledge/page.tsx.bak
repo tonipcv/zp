@@ -1,0 +1,628 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { AppLayout } from '@/components/AppSidebar';
+import { 
+  Brain, 
+  Plus, 
+  Edit, 
+  Trash2, 
+  Search,
+  BookOpen,
+  MessageSquare,
+  DollarSign,
+  HelpCircle,
+  TrendingUp,
+  Zap,
+  FileText,
+  Settings,
+  ArrowLeft
+} from 'lucide-react';
+import { toast } from 'sonner';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import Link from 'next/link';
+import { KnowledgeType } from '@prisma/client';
+
+interface KnowledgeChunk {
+  id: string;
+  title: string;
+  content: string;
+  type: KnowledgeType;
+  tags?: string;
+  priority: number;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface Agent {
+  id: string;
+  instance: {
+    instanceName: string;
+  };
+  companyName?: string;
+  product?: string;
+}
+
+const typeConfig = {
+  OBJECTION: { icon: DollarSign, label: 'Objeções', color: 'bg-red-100 text-red-800', emoji: '💰' },
+  FAQ: { icon: HelpCircle, label: 'FAQ', color: 'bg-blue-100 text-blue-800', emoji: '❓' },
+  CASE: { icon: TrendingUp, label: 'Cases', color: 'bg-green-100 text-green-800', emoji: '📈' },
+  FEATURE: { icon: Zap, label: 'Features', color: 'bg-purple-100 text-purple-800', emoji: '⚡' },
+  PROCESS: { icon: Settings, label: 'Processos', color: 'bg-orange-100 text-orange-800', emoji: '🔄' },
+  SCRIPT: { icon: MessageSquare, label: 'Scripts', color: 'bg-indigo-100 text-indigo-800', emoji: '📝' },
+  POLICY: { icon: FileText, label: 'Políticas', color: 'bg-gray-100 text-gray-800', emoji: '📋' },
+  MANUAL: { icon: BookOpen, label: 'Manual', color: 'bg-yellow-100 text-yellow-800', emoji: '📖' }
+};
+
+export default function KnowledgePage() {
+  const [agents, setAgents] = useState<Agent[]>([]);
+  const [selectedAgent, setSelectedAgent] = useState<string>('');
+  const [chunks, setChunks] = useState<KnowledgeChunk[]>([]);
+  const [filteredChunks, setFilteredChunks] = useState<KnowledgeChunk[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterType, setFilterType] = useState<KnowledgeType | 'ALL'>('ALL');
+  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [editingChunk, setEditingChunk] = useState<KnowledgeChunk | null>(null);
+  const [creating, setCreating] = useState(false);
+
+  // Form state
+  const [formData, setFormData] = useState({
+    title: '',
+    content: '',
+    type: 'FAQ' as KnowledgeType,
+    tags: '',
+    priority: 3
+  });
+
+  useEffect(() => {
+    loadAgents();
+  }, []);
+
+  useEffect(() => {
+    if (selectedAgent) {
+      loadChunks();
+    }
+  }, [selectedAgent]);
+
+  useEffect(() => {
+    filterChunks();
+  }, [chunks, searchTerm, filterType]);
+
+  const loadAgents = async () => {
+    try {
+      const response = await fetch('/api/ai-agent/configs');
+      if (response.ok) {
+        const data = await response.json();
+        setAgents(data.agents || []);
+        if (data.agents?.length > 0) {
+          setSelectedAgent(data.agents[0].id);
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao carregar agentes:', error);
+      toast.error('Erro ao carregar agentes');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadChunks = async () => {
+    if (!selectedAgent) return;
+    
+    try {
+      const response = await fetch(`/api/ai-agent/knowledge?agentId=${selectedAgent}`);
+      if (response.ok) {
+        const data = await response.json();
+        setChunks(data.chunks || []);
+      }
+    } catch (error) {
+      console.error('Erro ao carregar conhecimento:', error);
+      toast.error('Erro ao carregar base de conhecimento');
+    }
+  };
+
+  const filterChunks = () => {
+    let filtered = chunks;
+
+    if (searchTerm) {
+      filtered = filtered.filter(chunk => 
+        chunk.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        chunk.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        chunk.tags?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (filterType !== 'ALL') {
+      filtered = filtered.filter(chunk => chunk.type === filterType);
+    }
+
+    setFilteredChunks(filtered);
+  };
+
+  const createChunk = async () => {
+    if (!selectedAgent) return;
+    
+    setCreating(true);
+    try {
+      const response = await fetch('/api/ai-agent/knowledge', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          agentId: selectedAgent,
+          ...formData
+        })
+      });
+
+      if (response.ok) {
+        toast.success('Conhecimento adicionado com sucesso!');
+        setShowCreateForm(false);
+        resetForm();
+        loadChunks();
+      } else {
+        const error = await response.json();
+        toast.error(error.error || 'Erro ao criar conhecimento');
+      }
+    } catch (error) {
+      console.error('Erro ao criar conhecimento:', error);
+      toast.error('Erro ao criar conhecimento');
+    } finally {
+      setCreating(false);
+    }
+  };
+
+  const updateChunk = async () => {
+    if (!editingChunk) return;
+    
+    setCreating(true);
+    try {
+      const response = await fetch(`/api/ai-agent/knowledge/${editingChunk.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        toast.success('Conhecimento atualizado com sucesso!');
+        setEditingChunk(null);
+        resetForm();
+        loadChunks();
+      } else {
+        const error = await response.json();
+        toast.error(error.error || 'Erro ao atualizar conhecimento');
+      }
+    } catch (error) {
+      console.error('Erro ao atualizar conhecimento:', error);
+      toast.error('Erro ao atualizar conhecimento');
+    } finally {
+      setCreating(false);
+    }
+  };
+
+  const deleteChunk = async (chunkId: string, title: string) => {
+    if (!confirm(`Tem certeza que deseja excluir "${title}"?`)) return;
+    
+    try {
+      const response = await fetch(`/api/ai-agent/knowledge/${chunkId}`, {
+        method: 'DELETE'
+      });
+
+      if (response.ok) {
+        toast.success('Conhecimento excluído com sucesso!');
+        loadChunks();
+      } else {
+        const error = await response.json();
+        toast.error(error.error || 'Erro ao excluir conhecimento');
+      }
+    } catch (error) {
+      console.error('Erro ao excluir conhecimento:', error);
+      toast.error('Erro ao excluir conhecimento');
+    }
+  };
+
+  const resetForm = () => {
+    setFormData({
+      title: '',
+      content: '',
+      type: 'FAQ',
+      tags: '',
+      priority: 3
+    });
+  };
+
+  const startEdit = (chunk: KnowledgeChunk) => {
+    setEditingChunk(chunk);
+    setFormData({
+      title: chunk.title,
+      content: chunk.content,
+      type: chunk.type,
+      tags: chunk.tags || '',
+      priority: chunk.priority
+    });
+  };
+
+  const getTypeStats = () => {
+    const stats: Record<KnowledgeType, number> = {
+      OBJECTION: 0, FAQ: 0, CASE: 0, FEATURE: 0,
+      PROCESS: 0, SCRIPT: 0, POLICY: 0, MANUAL: 0
+    };
+    
+    chunks.forEach(chunk => {
+      stats[chunk.type]++;
+    });
+    
+    return stats;
+  };
+
+  const selectedAgentData = agents.find(a => a.id === selectedAgent);
+
+  if (loading) {
+    return (
+      <AppLayout>
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-700"></div>
+        </div>
+      </AppLayout>
+    );
+  }
+
+  return (
+    <AppLayout>
+      <div className="w-full">
+        <div className="max-w-7xl mx-auto px-4 py-4 space-y-4">
+          {/* Header */}
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <Link href="/ai-agent">
+                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                  <ArrowLeft className="h-4 w-4" />
+                </Button>
+              </Link>
+              <div>
+                <h1 className="text-lg sm:text-base md:text-lg font-bold text-[#f5f5f7] tracking-[-0.03em] font-inter">
+                  Knowledge Base
+                </h1>
+                <p className="text-xs sm:text-xs md:text-xs text-[#f5f5f7]/70 tracking-[-0.03em] font-inter">
+                  Manage your AI agents' knowledge
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-2 mt-3 md:mt-0">
+              <Button 
+                onClick={() => setShowCreateForm(true)}
+                disabled={!selectedAgent}
+                className="h-8 sm:h-7 bg-[#3a3b3d] border border-[#4a4b4d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md text-[#f5f5f7] hover:bg-[#4a4b4d] text-xs sm:text-xs"
+              >
+                <Plus className="h-3 w-3 mr-1.5" />
+                New Knowledge
+              </Button>
+            </div>
+          </div>
+
+          {agents.length === 0 ? (
+            <Card className="bg-[#2a2b2d]/50 border border-[#3a3b3d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md">
+              <CardContent className="p-6 text-center">
+                <Brain className="h-8 w-8 text-[#f5f5f7]/70 mx-auto mb-3" />
+                <h3 className="text-base font-semibold text-[#f5f5f7] mb-2 tracking-[-0.03em] font-inter">
+                  No agents found
+                </h3>
+                <p className="text-[#f5f5f7]/70 mb-4 text-xs tracking-[-0.03em] font-inter">
+                  You need to create an agent first to add knowledge.
+                </p>
+                <Link href="/ai-agent">
+                  <Button className="bg-[#3a3b3d] border border-[#4a4b4d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md text-[#f5f5f7] hover:bg-[#4a4b4d] h-8 text-xs">
+                    Create Agent
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          ) : (
+            <>
+              {/* Agent Selector */}
+              <Card className="bg-[#2a2b2d]/50 border border-[#3a3b3d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md mb-4">
+                <CardContent className="p-4">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                    <Label className="text-[#f5f5f7] font-medium text-xs">Selected Agent:</Label>
+                    <Select value={selectedAgent} onValueChange={setSelectedAgent}>
+                      <SelectTrigger className="w-full sm:w-[300px] h-8 bg-[#3a3b3d] border-[#4a4b4d]/30 text-[#f5f5f7]">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="bg-[#2a2b2d] border-[#3a3b3d] text-[#f5f5f7]">
+                        {agents.map((agent) => (
+                          <SelectItem key={agent.id} value={agent.id} className="text-[#f5f5f7] hover:bg-[#3a3b3d]">
+                            {agent.instance.instanceName} 
+                            {agent.companyName && ` - ${agent.companyName}`}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Stats Cards */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                {Object.entries(getTypeStats()).map(([type, count]) => {
+                  const config = typeConfig[type as KnowledgeType];
+                  const Icon = config.icon;
+                  return (
+                    <Card key={type} className="bg-[#2a2b2d]/50 border border-[#3a3b3d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md">
+                      <CardContent className="p-3">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="text-xs text-[#f5f5f7]/70">{config.label}</p>
+                            <p className="text-lg font-bold text-[#f5f5f7]">{count}</p>
+                          </div>
+                          <Icon className="h-4 w-4 text-[#f5f5f7]/70" />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
+
+              {/* Search and Filters */}
+              <Card className="bg-[#2a2b2d]/50 border border-[#3a3b3d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md mb-4">
+                <CardContent className="p-4">
+                  <div className="flex flex-col md:flex-row gap-3">
+                    <div className="flex-1">
+                      <div className="relative">
+                        <Search className="absolute left-2 top-2 h-3 w-3 text-[#f5f5f7]/70" />
+                        <Input
+                          placeholder="Search by title, content or tags..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="pl-7 h-8 text-xs bg-[#3a3b3d] border-[#4a4b4d]/30 text-[#f5f5f7] placeholder:text-[#f5f5f7]/50"
+                        />
+                      </div>
+                    </div>
+                    <div className="w-full md:w-48">
+                      <Select value={filterType} onValueChange={(value) => setFilterType(value as any)}>
+                        <SelectTrigger className="h-8 bg-[#3a3b3d] border-[#4a4b4d]/30 text-[#f5f5f7]">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent className="bg-[#2a2b2d] border-[#3a3b3d] text-[#f5f5f7]">
+                          <SelectItem value="ALL" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">All types</SelectItem>
+                          {Object.entries(typeConfig).map(([type, config]) => (
+                            <SelectItem key={type} value={type} className="text-[#f5f5f7] hover:bg-[#3a3b3d]">
+                              {config.emoji} {config.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Knowledge List */}
+              <div className="space-y-4">
+                {filteredChunks.length === 0 ? (
+                  <Card className="bg-[#2a2b2d]/50 border border-[#3a3b3d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md">
+                    <CardContent className="p-8 text-center">
+                      <Brain className="h-12 w-12 text-[#f5f5f7]/70 mx-auto mb-4" />
+                      <h3 className="text-lg font-semibold text-[#f5f5f7] mb-2">
+                        {chunks.length === 0 ? 'No knowledge added' : 'No results found'}
+                      </h3>
+                      <p className="text-[#f5f5f7]/70 mb-4">
+                        {chunks.length === 0 
+                          ? 'Add specific knowledge to make your agent smarter.'
+                          : 'Try adjusting filters or search term.'
+                        }
+                      </p>
+                      {chunks.length === 0 && (
+                        <Button 
+                          onClick={() => setShowCreateForm(true)}
+                          className="bg-[#3a3b3d] border border-[#4a4b4d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md text-[#f5f5f7] hover:bg-[#4a4b4d]"
+                        >
+                          Add First Knowledge
+                        </Button>
+                      )}
+                    </CardContent>
+                  </Card>
+                ) : (
+                  filteredChunks.map((chunk) => {
+                    const config = typeConfig[chunk.type];
+                    const Icon = config.icon;
+                    return (
+                      <Card key={chunk.id} className="bg-[#2a2b2d]/50 border border-[#3a3b3d]/30 shadow-sm hover:shadow-md transition-all duration-300 rounded-md">
+                        <CardContent className="p-6">
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-3 mb-3">
+                                <Badge className={`${config.color} text-[#f5f5f7]`}>
+                                  <Icon className="h-3 w-3 mr-1" />
+                                  {config.label}
+                                </Badge>
+                                <div className="flex items-center gap-1">
+                                  {Array.from({ length: 5 }, (_, i) => (
+                                    <div
+                                      key={i}
+                                      className={`w-2 h-2 rounded-full ${
+                                        i < chunk.priority ? 'bg-yellow-400' : 'bg-[#4a4b4d]'
+                                      }`}
+                                    />
+                                  ))}
+                                </div>
+                              </div>
+                              
+                              <h3 className="text-lg font-semibold text-[#f5f5f7] mb-2">
+                                {chunk.title}
+                              </h3>
+                              
+                              <p className="text-[#f5f5f7]/70 mb-3 line-clamp-3">
+                                {chunk.content}
+                              </p>
+                              
+                              {chunk.tags && (
+                                <div className="flex flex-wrap gap-1 mb-3">
+                                  {chunk.tags.split(',').map((tag, index) => (
+                                    <Badge key={index} variant="outline" className="text-xs text-[#f5f5f7] border-[#4a4b4d]">
+                                      {tag.trim()}
+                                    </Badge>
+                                  ))}
+                                </div>
+                              )}
+                              
+                              <p className="text-xs text-[#f5f5f7]/70">
+                                Created on {new Date(chunk.createdAt).toLocaleDateString()}
+                              </p>
+                            </div>
+                            
+                            <div className="flex items-center gap-2 ml-4">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => startEdit(chunk)}
+                                className="border-[#4a4b4d] text-[#f5f5f7] hover:bg-[#3a3b3d] hover:border-[#5a5b5d]"
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => deleteChunk(chunk.id, chunk.title)}
+                                className="border-red-800/40 text-red-400 hover:bg-red-900/30 hover:text-red-300 hover:border-red-700/50"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })
+                )}
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Create/Edit Modal */}
+        <Dialog open={showCreateForm || !!editingChunk} onOpenChange={(open) => {
+          if (!open) {
+            setShowCreateForm(false);
+            setEditingChunk(null);
+            resetForm();
+          }
+        }}>
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-[#1c1d20] border border-[#3a3b3d] shadow-xl">
+            <DialogHeader className="bg-[#2a2b2d] text-[#f5f5f7] p-6 -m-6 mb-6 rounded-t-md">
+              <DialogTitle className="flex items-center gap-2 text-[#f5f5f7]">
+                <Brain className="h-5 w-5" />
+                {editingChunk ? 'Edit Knowledge' : 'Add Knowledge'}
+              </DialogTitle>
+              <DialogDescription className="text-[#f5f5f7]/70">
+                {editingChunk ? 'Modify knowledge information' : 'Add new knowledge to the agent database'}
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="space-y-6 px-1">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-[#f5f5f7] font-medium">Knowledge Type</Label>
+                  <Select value={formData.type} onValueChange={(value) => setFormData(prev => ({ ...prev, type: value as KnowledgeType }))}>
+                    <SelectTrigger className="bg-[#3a3b3d] border-[#4a4b4d]/30 text-[#f5f5f7]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-[#2a2b2d] border-[#3a3b3d] text-[#f5f5f7]">
+                      {Object.entries(typeConfig).map(([type, config]) => (
+                        <SelectItem key={type} value={type} className="text-[#f5f5f7] hover:bg-[#3a3b3d]">
+                          {config.emoji} {config.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-[#f5f5f7] font-medium">Priority (1-5)</Label>
+                  <Select value={formData.priority.toString()} onValueChange={(value) => setFormData(prev => ({ ...prev, priority: parseInt(value) }))}>
+                    <SelectTrigger className="bg-[#3a3b3d] border-[#4a4b4d]/30 text-[#f5f5f7]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="bg-[#2a2b2d] border-[#3a3b3d] text-[#f5f5f7]">
+                      <SelectItem value="1" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">⭐ 1 - Low</SelectItem>
+                      <SelectItem value="2" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">⭐⭐ 2 - Low-Medium</SelectItem>
+                      <SelectItem value="3" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">⭐⭐⭐ 3 - Medium</SelectItem>
+                      <SelectItem value="4" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">⭐⭐⭐⭐ 4 - High</SelectItem>
+                      <SelectItem value="5" className="text-[#f5f5f7] hover:bg-[#3a3b3d]">⭐⭐⭐⭐⭐ 5 - Critical</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-gray-900 font-medium">Título</Label>
+                <Input
+                  value={formData.title}
+                  onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+                  placeholder="Ex: Como responder objeção de preço"
+                  className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-400 focus:border-gray-900 focus:ring-gray-900"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-gray-900 font-medium">Conteúdo</Label>
+                <Textarea
+                  value={formData.content}
+                  onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
+                  placeholder="Descreva o conhecimento detalhadamente..."
+                  className="min-h-[120px] bg-white border-gray-300 text-gray-900 placeholder:text-gray-400 focus:border-gray-900 focus:ring-gray-900"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label className="text-gray-900 font-medium">Tags (separadas por vírgula)</Label>
+                <Input
+                  value={formData.tags}
+                  onChange={(e) => setFormData(prev => ({ ...prev, tags: e.target.value }))}
+                  placeholder="Ex: preço, desconto, valor, investimento"
+                  className="bg-white border-gray-300 text-gray-900 placeholder:text-gray-400 focus:border-gray-900 focus:ring-gray-900"
+                />
+              </div>
+            </div>
+
+            <DialogFooter className="flex gap-3 pt-6">
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setShowCreateForm(false);
+                  setEditingChunk(null);
+                  resetForm();
+                }}
+                className="border-gray-300 text-gray-700 hover:bg-gray-100"
+              >
+                Cancelar
+              </Button>
+              <Button 
+                onClick={editingChunk ? updateChunk : createChunk}
+                disabled={creating || !formData.title || !formData.content}
+                className="bg-gray-900 hover:bg-gray-800 text-white"
+              >
+                {creating ? (
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                ) : (
+                  <Brain className="h-4 w-4 mr-2" />
+                )}
+                {creating ? 'Salvando...' : (editingChunk ? 'Atualizar' : 'Adicionar')}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </div>
+    </AppLayout>
+  );
+}
