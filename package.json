@@ -12,7 +12,8 @@
     "ngrok:set": "node scripts/update-ngrok-url.js",
     "dev:ngrok": "echo '🚀 Inicie o ngrok em outro terminal: ngrok http 3000' && echo '📝 Depois execute: npm run ngrok:update' && npm run dev",
     "redis": "node scripts/redis-manager.js",
-    "test:external-api": "node scripts/test-external-api.js"
+    "test:external-api": "node scripts/test-external-api.js",
+    "migrate:api-keys": "node scripts/apply-sql-migration.js scripts/migrations/add-api-keys-tables.sql"
   },
   "dependencies": {
     "@auth/core": "^0.34.2",

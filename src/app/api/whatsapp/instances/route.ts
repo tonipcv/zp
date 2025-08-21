@@ -74,7 +74,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const body = await request.json();
+    let body: any = {};
+    try {
+      body = await request.json();
+    } catch {
+      body = {};
+    }
+
+    if (body == null || typeof body !== 'object') {
+      body = {};
+    }
+
+    console.log('POST /api/whatsapp/instances - Request body:', JSON.stringify(body, null, 2));
+
     const { instanceName, sessionToken, webhookUrl, autoReconnect } = body;
 
     // Validações básicas
@@ -101,19 +113,28 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json({ instance }, { status: 201 });
-  } catch (error) {
-    console.error('Erro ao criar instância:', error);
-    
-    if (error instanceof Error) {
-      return NextResponse.json(
-        { error: error.message },
-        { status: 400 }
-      );
+  } catch (error: any) {
+    // Log detalhado no servidor
+    const details: any = {
+      name: error?.name,
+      message: error?.message,
+      stack: error?.stack,
+    };
+    if (error?.response) {
+      details.responseStatus = error.response.status;
+      details.responseData = error.response.data;
     }
-    
-    return NextResponse.json(
-      { error: 'Erro interno do servidor' },
-      { status: 500 }
-    );
+    console.error('Erro ao criar instância (detalhes):', JSON.stringify(details, null, 2));
+
+    const status = error?.status || error?.response?.status || 400;
+    const body: any = { error: error?.message || 'Erro ao criar instância' };
+    if (error?.suggestion) {
+      body.suggestion = error.suggestion;
+    }
+    if (error?.response?.data) {
+      body.details = error.response.data;
+    }
+
+    return NextResponse.json(body, { status });
   }
 } 

@@ -231,6 +231,7 @@ export class EvolutionApiClient {
    */
   async createInstance(data: CreateInstanceRequest): Promise<CreateInstanceResponse> {
     try {
+      console.log('Evolution API createInstance - Payload:', JSON.stringify(data, null, 2))
       const response = await this.client.post('/instance/create', data);
       return response.data;
     } catch (error: any) {
@@ -241,6 +242,7 @@ export class EvolutionApiClient {
       
       if (error.response?.data) {
         const errorData = error.response.data;
+        console.error('Evolution API createInstance - Error response data:', JSON.stringify(errorData, null, 2))
         
         // Tratar erro de nome duplicado
         if (error.response.status === 403 && errorData.response?.message) {
@@ -270,10 +272,12 @@ export class EvolutionApiClient {
         errorMessage = error.message;
       }
       
-      // Log adicional para debug
+      // Log bruto para depuração adicional
       if (error.response) {
-        console.error('Status:', error.response.status);
-        console.error('Data:', error.response.data);
+        console.error('Evolution API createInstance - Status:', error.response.status)
+        try {
+          console.error('Evolution API createInstance - Data:', JSON.stringify(error.response.data, null, 2))
+        } catch {}
       }
       
       throw new Error(errorMessage);

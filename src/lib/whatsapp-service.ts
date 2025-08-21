@@ -39,22 +39,40 @@ export class WhatsAppService {
 
       console.log(`[CREATE] Iniciando criação da instância: ${instanceName}`);
 
-      // Criar no banco primeiro
-      const dbInstance = await prisma.whatsAppInstance.create({
-        data: {
-          userId: data.userId,
-          instanceName,
-          status: 'CREATING',
-          webhookUrl,
-          autoReconnect: data.autoReconnect ?? true,
-        },
-      });
+      // Verificação prévia: nome já existe?
+      const existingByName = await prisma.whatsAppInstance.findUnique({ where: { instanceName } });
+      if (existingByName) {
+        const suggested = await this.evolutionApi.generateUniqueInstanceName(instanceName);
+        const err = new Error('Nome da instância já está em uso');
+        throw Object.assign(err, { status: 409, suggestion: suggested });
+      }
 
-      // Preparar dados para Evolution API
+      // Criar no banco primeiro
+      let dbInstance;
+      try {
+        dbInstance = await prisma.whatsAppInstance.create({
+          data: {
+            userId: data.userId,
+            instanceName,
+            status: 'CREATING',
+            webhookUrl,
+            autoReconnect: data.autoReconnect ?? true,
+          },
+        });
+      } catch (e: any) {
+        // Tratar violação de unicidade (P2002)
+        if (e?.code === 'P2002') {
+          const suggested = await this.evolutionApi.generateUniqueInstanceName(instanceName);
+          const err = new Error('Nome da instância já está em uso');
+          throw Object.assign(err, { status: 409, suggestion: suggested });
+        }
+        throw e;
+      }
+
+      // Preparar dados para Evolution API (não enviar token quando inexistente)
       const evolutionRequest: CreateInstanceRequest = {
         instanceName,
         integration: 'WHATSAPP-BAILEYS',
-        token: data.sessionToken,
         qrcode: true,
         webhook: {
           url: webhookUrl,
@@ -78,6 +96,11 @@ export class WhatsAppService {
         read_status: false,
         websocket_enabled: false,
       };
+
+      // Incluir token somente se presente (evita enviar null)
+      if (data.sessionToken) {
+        (evolutionRequest as any).token = data.sessionToken;
+      }
 
       console.log(`[CREATE] Criando instância ${instanceName} com webhook: ${webhookUrl}`);
 
@@ -121,8 +144,26 @@ export class WhatsAppService {
         webhookConfigured,
         webhookError,
       };
-    } catch (error) {
-      console.error('Erro ao criar instância:', error);
+    } catch (error: any) {
+      // Log detalhado para entender a causa raiz
+      const details: any = {
+        name: error?.name,
+        message: error?.message,
+        stack: error?.stack,
+      };
+      // Erro do axios (Evolution API)
+      if (error?.response) {
+        details.responseStatus = error.response.status;
+        details.responseData = error.response.data;
+      }
+      if (error?.config) {
+        details.request = {
+          url: error.config.url,
+          method: error.config.method,
+          data: error.config.data,
+        };
+      }
+      console.error('[CREATE] Erro ao criar instância (detalhes):', JSON.stringify(details, null, 2));
       throw error;
     }
   }

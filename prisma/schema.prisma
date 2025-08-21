@@ -41,7 +41,11 @@ datasource db {
   sessions             Session[]
   subscriptions        Subscription[]
   whatsappInstances    WhatsAppInstance[]
-   }
+  calendlyConnection   CalendlyConnection?
+  calendlyWebhookSubscriptions CalendlyWebhookSubscription[]
+  calendlyEvents       CalendlyEvent[]
+  apiKeys              ApiKey[]
+}
 
    model Account {
   id                String  @id @default(cuid())
@@ -152,6 +156,7 @@ model WhatsAppInstance {
   user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   labels             WhatsAppLabel[]
   messages           WhatsAppMessage[]
+  apiKeyScopes       ApiKeyInstance[]
 
   @@map("whatsapp_instances")
 }
@@ -433,4 +438,107 @@ model AIModelUsage {
   @@index([modelId])
   @@index([timestamp])
   @@map("ai_model_usages")
+}
+
+/// Calendly: conexão OAuth por usuário
+model CalendlyConnection {
+  id               String   @id @default(cuid())
+  userId           String
+  ownerUri         String
+  ownerEmail       String?
+  organizationUri  String
+  accessToken      String
+  refreshToken     String?
+  expiresAt        DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId])
+  @@index([ownerUri])
+  @@index([organizationUri])
+  @@map("calendly_connections")
+}
+
+/// Calendly: assinatura de webhooks por usuário
+model CalendlyWebhookSubscription {
+  id              String   @id @default(cuid())
+  userId          String
+  subscriptionUri String   @unique
+  scope           String   // "organization" ou "user"
+  events          String   // lista separada por vírgula ou JSON serializado
+  signingKey      String?
+  active          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("calendly_webhook_subscriptions")
+}
+
+/// Calendly: eventos recebidos via webhook
+model CalendlyEvent {
+  id             String   @id @default(cuid())
+  userId         String
+  eventUri       String   @unique
+  eventTypeUri   String?
+  inviteeEmail   String?
+  inviteeName    String?
+  startTime      DateTime?
+  endTime        DateTime?
+  timezone       String?
+  status         String   @default("scheduled") // scheduled, canceled, rescheduled
+  payload        String?  // JSON bruto do Calendly
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([startTime])
+  @@map("calendly_events")
+}
+
+/// API Keys para integrações externas
+model ApiKey {
+  id                 String    @id @default(cuid())
+  userId             String
+  name               String?
+  keyHash            String    // hash derivado da chave do cliente
+  salt               String    // salt único por chave
+  status             String    @default("active") // active | revoked
+  expiresAt          DateTime?
+  ipAllowlist        String?   // JSON opcional com lista de IPs
+  rateLimitPerMinute Int?      // rate limit específico por chave
+  last8              String?   // últimos 8 chars da chave, para exibição
+  lastUsedAt         DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  instances          ApiKeyInstance[]
+
+  @@unique([keyHash])
+  @@index([userId])
+  @@index([status])
+  @@map("api_keys")
+}
+
+/// Relação N:N entre ApiKey e WhatsAppInstance (escopo por instância)
+model ApiKeyInstance {
+  id        String           @id @default(cuid())
+  apiKeyId  String
+  instanceId String
+  createdAt DateTime         @default(now())
+
+  apiKey    ApiKey           @relation(fields: [apiKeyId], references: [id], onDelete: Cascade)
+  instance  WhatsAppInstance @relation(fields: [instanceId], references: [id], onDelete: Cascade)
+
+  @@unique([apiKeyId, instanceId])
+  @@index([apiKeyId])
+  @@index([instanceId])
+  @@map("api_key_instances")
 }

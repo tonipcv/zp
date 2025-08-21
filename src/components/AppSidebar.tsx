@@ -32,7 +32,9 @@ import {
   Zap,
   Home,
   Menu,
-  LogOut
+  LogOut,
+  Calendar,
+  Key
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
@@ -65,6 +67,16 @@ const menuItems = [
         title: "Perfil",
         url: "/profile",
         icon: User,
+      },
+      {
+        title: "Integrations",
+        url: "/settings/integrations",
+        icon: Calendar,
+      },
+      {
+        title: "API Keys",
+        url: "/settings/api-keys",
+        icon: Key,
       },
     ],
   },

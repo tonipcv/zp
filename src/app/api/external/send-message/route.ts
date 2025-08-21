@@ -6,12 +6,8 @@ const whatsappService = new WhatsAppService(
   process.env.EVOLUTION_API_KEY
 );
 
-// Chave de API para sistemas externos - OBRIGATÓRIA no .env
+// Chave de API para sistemas externos (se não estiver definida, os handlers irão rejeitar com 401)
 const EXTERNAL_API_KEY = process.env.EXTERNAL_API_KEY;
-
-if (!EXTERNAL_API_KEY) {
-  throw new Error('❌ EXTERNAL_API_KEY não configurada no arquivo .env - Esta variável é obrigatória para a API Externa funcionar');
-}
 
 export async function POST(request: NextRequest) {
   try {
